@@ -1,5 +1,3 @@
-// volatile class Deck ??
-
 public class Card {
     public int value;
     public int age = 0;
