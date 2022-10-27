@@ -7,6 +7,6 @@ interface PlayerInterface {
 }
 
 public class Player {
-    private LinkedList<Integer> cards;
+    private LinkedList<Card> cards;
     private Integer preferedDenom;
 }
