@@ -6,4 +6,5 @@ interface DeckInterface {
 }
 public class Deck {
     private volatile LinkedList<Card> deck; // is volatile needed here?
+    public Deck(Card[] cards) {}
 }
