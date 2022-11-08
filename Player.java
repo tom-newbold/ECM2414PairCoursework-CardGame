@@ -1,8 +1,11 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Random;
+
+import javax.print.DocFlavor.READER;
 
 public class Player {
     private Integer playerID;
-    private LinkedList<Card> hand;
+    private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
     public Player(Integer pID, Card[] cards) {
         this.playerID = pID;
@@ -25,16 +28,28 @@ public class Player {
      * @returns The discarded card
      */
     private Card discardCard() {
-        Card toDiscard;
-        int maxAge = -1;
-        for (Card c : this.hand) {
-            if(c.getValue() != this.preferredDenom && c.getAge()>maxAge) {
-                toDiscard = c;
-                maxAge = c.getAge();
+        ArrayList<Integer> toDiscard = new ArrayList<Integer>();
+        Integer maxAge = -1;
+        for (Integer i=0; i<hand.size(); i++) {
+            Card c = this.hand.get(i);
+            if(c.getValue() != this.preferredDenom && c.getAge()>=maxAge) {
+                if(c.getAge()!=maxAge) {
+                    toDiscard.clear();
+                    maxAge = c.getAge();
+                }
+                toDiscard.add(i);
             }
         }
-        // toDiscard should always be defined ????????
-        return this.hand.pop(); // TODO: return c
+        // toDiscard should never be empty ??
+        Integer choice_i;
+        if(toDiscard.size()==1) {
+            choice_i = 0;
+        } else {
+            Random r = new Random();
+            choice_i = r.nextInt(toDiscard.size());
+        }
+        Integer choice = toDiscard.get(choice_i);
+        return this.hand.remove(choice);
     }
 
     /**
