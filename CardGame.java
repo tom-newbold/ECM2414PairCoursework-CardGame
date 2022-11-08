@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class CardGame {
     /**
      * Takes input, checks validity
@@ -5,10 +7,18 @@ public class CardGame {
      * Distributes cards, inital win condition check, distribute decks
      * Start threads
      */
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter the number of players: ");
+        int players = reader.nextInt();
+        reader.close();
+        
+        for (int i = 0; i < players; i++)
+            new Thread(Integer.toString(i));
+    }
 }
 
-/*
+/* 
  * placeholder n; mainloop
  * 
 int n = 4;
