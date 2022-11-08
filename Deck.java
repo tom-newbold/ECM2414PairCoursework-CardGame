@@ -1,7 +1,7 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Deck {
-    private LinkedList<Card> deck = new LinkedList<Card>();
+    private ArrayList<Card> deck = new ArrayList<Card>();
     public Deck(Card[] cards) {
         for (Card c : cards) {
             this.deck.add(c);
@@ -16,8 +16,8 @@ public class Deck {
         while(this.deck.size()<=0) {
             wait();
         }
-        return this.deck.pop();
-    };
+        return this.deck.remove(0); // removed by index
+    }
 
     /**
      * Adds a card to the (bottom of?) the deck
@@ -26,5 +26,5 @@ public class Deck {
     public synchronized void addCard(Card c) {
         this.deck.add(c);
         notify();
-    };
+    }
 }

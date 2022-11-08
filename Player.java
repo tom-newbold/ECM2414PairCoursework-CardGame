@@ -1,8 +1,9 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Player {
     private Integer playerID;
-    private LinkedList<Card> hand;
+    private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
     public Player(Integer pID, Card[] cards) {
         this.playerID = pID;
@@ -25,16 +26,30 @@ public class Player {
      * @returns The discarded card
      */
     private Card discardCard() {
-        Card toDiscard;
-        int maxAge = -1;
-        for (Card c : this.hand) {
-            if(c.getValue() != this.preferredDenom && c.getAge()>maxAge) {
-                toDiscard = c;
-                maxAge = c.getAge();
+        ArrayList<Card> toDiscard = new ArrayList<Card>();
+        // stores "least desirable" cards to choose from; determined using card "age" and value
+        Integer maxAge = -1;
+        for (Card c : hand) {
+            if(c.getValue() != this.preferredDenom && c.getAge()>=maxAge) {
+                if(c.getAge()!=maxAge) {
+                    toDiscard.clear();
+                    maxAge = c.getAge();
+                }
+                toDiscard.add(c);
             }
         }
-        // toDiscard should always be defined ????????
-        return this.hand.pop(); // TODO: return c
+        // toDiscard should never be empty
+        Integer choice_i;
+        if(toDiscard.size()==1) {
+            choice_i = 0;
+        } else {
+            Random r = new Random();
+            choice_i = r.nextInt(toDiscard.size());
+            // picks random card
+        }
+        Card choice = toDiscard.get(choice_i);
+        this.hand.remove(choice); // removed by object
+        return choice;
     }
 
     /**
@@ -54,10 +69,13 @@ public class Player {
      * @return True if the player has a winning hand
      */
     public Boolean winCondition() {
-        for (Card value: hand) {
-            if (value.equals(hand.get(0)))
-                return true;
+        Boolean win = true;
+        Integer firstVal = this.hand.get(0).getValue();
+        for(Card c : this.hand) {
+            if(c.getValue() != firstVal) {
+                win = false;
+            }
         }
-        return false; 
+        return win;
     }
 }
