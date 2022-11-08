@@ -13,8 +13,13 @@ public class CardGame {
         int players = reader.nextInt();
         reader.close();
         
-        for (int i = 0; i < players; i++)
-            new Thread(Integer.toString(i));
+        for (int i = 0; i < players; i++) {
+            new Thread(Integer.toString(i)) {
+                public void run() {
+                    System.out.println("Player " + this.getName());
+                }
+            }.start();
+        }
     }
 }
 
