@@ -28,16 +28,15 @@ public class Player {
      * @returns The discarded card
      */
     private Card discardCard() {
-        ArrayList<Integer> toDiscard = new ArrayList<Integer>();
+        ArrayList<Card> toDiscard = new ArrayList<Card>();
         Integer maxAge = -1;
-        for (Integer i=0; i<hand.size(); i++) {
-            Card c = this.hand.get(i);
+        for (Card c : hand) {
             if(c.getValue() != this.preferredDenom && c.getAge()>=maxAge) {
                 if(c.getAge()!=maxAge) {
                     toDiscard.clear();
                     maxAge = c.getAge();
                 }
-                toDiscard.add(i);
+                toDiscard.add(c);
             }
         }
         // toDiscard should never be empty ??
@@ -48,8 +47,9 @@ public class Player {
             Random r = new Random();
             choice_i = r.nextInt(toDiscard.size());
         }
-        Integer choice = toDiscard.get(choice_i);
-        return this.hand.remove(choice);
+        Card choice = toDiscard.get(choice_i);
+        this.hand.remove(choice);
+        return choice;
     }
 
     /**
