@@ -5,7 +5,7 @@ public class CardGame {
      * Distributes cards, inital win condition check, distribute decks
      * Start threads
      */
-    public static void main(String[] args) {};
+    public static void main(String[] args) {}
 }
 
 /*
