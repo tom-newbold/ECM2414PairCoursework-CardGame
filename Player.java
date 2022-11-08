@@ -27,6 +27,7 @@ public class Player {
      */
     private Card discardCard() {
         ArrayList<Card> toDiscard = new ArrayList<Card>();
+        // stores "least desirable" cards to choose from; determined using card "age" and value
         Integer maxAge = -1;
         for (Card c : hand) {
             if(c.getValue() != this.preferredDenom && c.getAge()>=maxAge) {
@@ -37,16 +38,17 @@ public class Player {
                 toDiscard.add(c);
             }
         }
-        // toDiscard should never be empty ??
+        // toDiscard should never be empty
         Integer choice_i;
         if(toDiscard.size()==1) {
             choice_i = 0;
         } else {
             Random r = new Random();
             choice_i = r.nextInt(toDiscard.size());
+            // picks random card
         }
         Card choice = toDiscard.get(choice_i);
-        this.hand.remove(choice);
+        this.hand.remove(choice); // removed by object
         return choice;
     }
 

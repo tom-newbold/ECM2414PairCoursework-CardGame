@@ -16,7 +16,7 @@ public class Deck {
         while(this.deck.size()<=0) {
             wait();
         }
-        return this.deck.remove(0);
+        return this.deck.remove(0); // removed by index
     }
 
     /**
