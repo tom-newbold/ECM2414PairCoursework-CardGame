@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.print.DocFlavor.READER;
-
 public class Player {
     private Integer playerID;
     private ArrayList<Card> hand = new ArrayList<Card>();
@@ -69,10 +67,13 @@ public class Player {
      * @return True if the player has a winning hand
      */
     public Boolean winCondition() {
-        for (Card value: hand) {
-            if (value.equals(hand.get(0)))
-                return true;
+        Boolean win = true;
+        Integer firstVal = this.hand.get(0).getValue();
+        for(Card c : this.hand) {
+            if(c.getValue() != firstVal) {
+                win = false;
+            }
         }
-        return false; 
+        return win;
     }
 }
