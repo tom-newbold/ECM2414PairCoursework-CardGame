@@ -49,16 +49,15 @@ public class Player {
     }
 
     /**
-     * Checks the players cards to see if
-     * Does not have to be preferred they have a winning hand
+     * Checks the players cards to see if they have a winning hand.
+     * Does not have to be preferred denomination, as long as there is 4 cards of the same value
      * @return True if the player has a winning hand
      */
     public Boolean winCondition() {
-        /*
-        if (hand.contains(preferedDenom)) {
-            
+        for (Card value: hand) {
+            if (value.equals(hand.get(0)))
+                return true;
         }
-        */
         return false; 
-    } // TODO
+    }
 }
