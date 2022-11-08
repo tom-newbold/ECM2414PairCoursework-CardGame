@@ -17,7 +17,7 @@ public class Deck {
             wait();
         }
         return this.deck.remove(0);
-    };
+    }
 
     /**
      * Adds a card to the (bottom of?) the deck
@@ -26,5 +26,5 @@ public class Deck {
     public synchronized void addCard(Card c) {
         this.deck.add(c);
         notify();
-    };
+    }
 }
