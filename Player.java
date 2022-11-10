@@ -7,7 +7,7 @@ public class Player {
     private Integer preferredDenom;
     public Player(Integer pID, Card[] cards) {
         this.playerID = pID;
-        this.preferredDenom = pID;
+        this.preferredDenom = this.playerID;
         for (Card c : cards) {
             this.hand.add(c);
         }
