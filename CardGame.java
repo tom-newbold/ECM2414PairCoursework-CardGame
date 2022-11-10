@@ -8,18 +8,34 @@ public class CardGame {
      * Start threads
      */
     public static void main(String[] args) {
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Enter the number of players: ");
-        int players = reader.nextInt();
-        reader.close();
+        Integer players;
+
+        System.out.println("Enter the number of players:");
+        Boolean validity = false;
+
+        while(validity == false) {
+            Scanner sc = new Scanner(System.in);
+            if(sc.hasNextInt()) {
+                players = sc.nextInt();
+                if(players > 0) {
+                    validity = true;
+                    sc.close();
+                } else {
+                    System.out.println("Please enter a positive number of players:");
+                }
+            } else {
+                System.out.println("Enter a valid number of players:");
+            }
+        }
         
+        /*
         for (int i = 0; i < players; i++) {
             new Thread(Integer.toString(i)) {
                 public void run() {
                     System.out.println("Player " + this.getName());
                 }
             }.start();
-        }
+        } */
     }
 }
 
