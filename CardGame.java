@@ -47,6 +47,7 @@ public class CardGame {
         //playerinput.close();
         
         Scanner fileInput = new Scanner(System.in); // Second scanner object needed for file input
+        Scanner fileReader = new Scanner(System.in);
         Boolean fileIsValid = false;
         // input is used for file object creation to check if file exists, if not it will loop
         do {
@@ -54,21 +55,26 @@ public class CardGame {
             packFile = fileInput.nextLine();
             File f = new File(packFile);
             if (f.exists()) {
+                System.out.println("file exists");
                 // validity check
                 ArrayList<String> denoms = new ArrayList<String>();
                 ArrayList<Integer> counts = new ArrayList<Integer>();
                 try {
-                    Scanner fileReader = new Scanner(f);
+                    fileReader = new Scanner(f);
+                    System.out.println(fileReader.nextLine());
                     while(fileReader.hasNextLine()) {
                         String nl = fileReader.nextLine();
+                        //System.out.println(nl);
                         if(denoms.contains(nl)) {
-                            Integer i = denoms.indexOf(nl);
+                            Integer i = denoms.indexOf(nl.replace("\n",""));
                             counts.set(i,counts.get(i)+1);
                         } else {
                             denoms.add(nl);
                             counts.add(1);
                         }
                     }
+                    //System.out.println(denoms);
+                    //System.out.println(counts);
                     for(Integer c : counts) {
                         if(c>=4) {
                             fileIsValid = true;
@@ -88,7 +94,7 @@ public class CardGame {
         try {
             // read pack
             File f = new File(packFile);
-            Scanner fileReader = new Scanner(f);
+            fileReader = new Scanner(f);
             ArrayList<String> denoms = new ArrayList<String>();
             while(fileReader.hasNextLine()) {
                 denoms.add(fileReader.nextLine());
@@ -107,7 +113,7 @@ public class CardGame {
                 }
             }
             // dealing decks
-            for(Integer i=4*players;i<8*players;i++) {
+            for(Integer i=4;i<8;i++) {
                 for(Integer j=0;j<players;j++) {
                     Integer value = Integer.parseInt(denoms.get(i*players + j));
                     deckCards[j][i] = new Card(value);
@@ -163,5 +169,6 @@ public class CardGame {
         // close remaining scanners ***
         playerInput.close();
         fileInput.close();
+        fileReader.close();
     }
 }
