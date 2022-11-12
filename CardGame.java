@@ -61,10 +61,9 @@ public class CardGame {
                 ArrayList<Integer> counts = new ArrayList<Integer>();
                 try {
                     fileReader = new Scanner(f);
-                    System.out.println(fileReader.nextLine());
                     while(fileReader.hasNextLine()) {
                         String nl = fileReader.nextLine();
-                        //System.out.println(nl);
+                        System.out.println(nl);
                         if(denoms.contains(nl)) {
                             Integer i = denoms.indexOf(nl.replace("\n",""));
                             counts.set(i,counts.get(i)+1);
@@ -103,7 +102,7 @@ public class CardGame {
             Random r = new Random();
             Collections.shuffle(denoms, r);
             // ***
-            FileWriter writeFile = new FileWriter(packFile);
+            FileWriter writeFile = new FileWriter("log.txt");
             // dealing player hands
             for(Integer i=0;i<4;i++) {
                 for(Integer j=0;j<players;j++) {
