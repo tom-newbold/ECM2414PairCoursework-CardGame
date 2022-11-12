@@ -18,9 +18,9 @@ public class CardGame {
     /* TASKS TO DO:
      * *DONE* player input and test validity 
      * *DONE* pack file input and validity
-     * player threads created
+     * *DONE* player threads created
      * *DONE* new card object created and written to pack file
-     * cards are distributed to make list of hands and decks for each player
+     * *DONE* cards are distributed to make list of hands and decks for each player
      *      NOTE: Order is 1 card to each player in a round robin until 4 cards, then decks 
      * output file is made for players and the decks EACH
      * wincondition checked upon each player, if no win is made
@@ -82,6 +82,9 @@ public class CardGame {
             }
         } while (fileIsValid == false);
 
+        Card[][] playerHands = new Card[players][4];
+        Card[][] deckCards = new Card[players][4];
+        Deck[] decks = new Deck[players];
         try {
             // read pack
             File f = new File(packFile);
@@ -96,7 +99,6 @@ public class CardGame {
             // ***
             FileWriter writeFile = new FileWriter(packFile);
             // dealing player hands
-            Card[][] playerHands = new Card[players][4];
             for(Integer i=0;i<4;i++) {
                 for(Integer j=0;j<players;j++) {
                     Integer value = Integer.parseInt(denoms.get(i*players + j));
@@ -105,13 +107,16 @@ public class CardGame {
                 }
             }
             // dealing decks
-            Card[][] decks = new Card[players][4];
             for(Integer i=4*players;i<8*players;i++) {
                 for(Integer j=0;j<players;j++) {
                     Integer value = Integer.parseInt(denoms.get(i*players + j));
-                    decks[j][i] = new Card(value);
+                    deckCards[j][i] = new Card(value);
                     writeFile.write(value.toString() + "\n"); 
                 }
+            }
+            decks = new Deck[players];
+            for(Integer i=0;i<players;i++) {
+                decks[i] = new Deck(deckCards[i]);
             }
             // ***
             fileReader.close();
@@ -123,35 +128,40 @@ public class CardGame {
         }
 
         // main loop for creating threads, make into List of threads?
-        Thread[] threads = new Thread[players];
-        for (int i = 0; i < players; i++) {
-            threads[i] = new Thread();
-            System.out.println("Player: " + threads[i].getName());
+        PlayerThread[] playerThreads = new PlayerThread[players];
+        for (Integer p = 0; p < players; p++) {
+            playerThreads[p] = new PlayerThread(Thread.currentThread(), p, playerHands[p], decks[p], decks[(p+1)%players]);
+            playerThreads[p].setName(Integer.toString(p));
         }
-        
 
+        Integer winPlayer = -1;
+        for(PlayerThread pt : playerThreads) {
+            if(pt.getPlayer().winCondition()) {
+                winPlayer = Integer.parseInt(pt.getName());
+                break;
+            }
+        }
+        if(winPlayer<0) {
+            for(PlayerThread pt : playerThreads) {
+                pt.start();
+            }
+            // pausing main thread
+            try {
+                Thread.currentThread().wait();
+            } catch (InterruptedException e) {}
+            for(PlayerThread pt : playerThreads) {
+                if(pt.isInterrupted()) {
+                    winPlayer = Integer.parseInt(pt.getName());
+                } else {
+                    pt.interrupt();
+                }
+            }
+        }
 
+        // TODO: winner here
+            
         // close remaining scanners ***
         playerInput.close();
         fileInput.close();
     }
 }
-
-/* 
- * placeholder n; mainloop
- * 
-int n = 4;
-Thread[] threads = new Thread[4];
-for(int i=0;i<n;i++) {
-    threads[i] = new Thread(); // anon class in here?
-}
- */
-
-/*
-        for (int i = 0; i < players; i++) {
-            new Thread(Integer.toString(i)) {
-                public void run() {
-                    System.out.println("Player " + this.getName());
-                }
-            }.start();
-        } */
