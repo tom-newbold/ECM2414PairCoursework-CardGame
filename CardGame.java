@@ -1,8 +1,11 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.Collections;
 
 public class CardGame {
     /**
@@ -44,35 +47,76 @@ public class CardGame {
         //playerinput.close();
         
         Scanner fileInput = new Scanner(System.in); // Second scanner object needed for file input
-        Boolean fileExists = false;
+        Boolean fileIsValid = false;
         // input is used for file object creation to check if file exists, if not it will loop
         do {
-            System.out.println("Enter a valid location of pack to load:");
+            System.out.println("Enter a location of valid pack to load:");
             packFile = fileInput.nextLine();
             File f = new File(packFile);
             if (f.exists()) {
-                fileExists = true;
+                // validity check
+                ArrayList<String> denoms = new ArrayList<String>();
+                ArrayList<Integer> counts = new ArrayList<Integer>();
+                try {
+                    Scanner fileReader = new Scanner(f);
+                    while(fileReader.hasNextLine()) {
+                        String nl = fileReader.nextLine();
+                        if(denoms.contains(nl)) {
+                            Integer i = denoms.indexOf(nl);
+                            counts.set(i,counts.get(i)+1);
+                        } else {
+                            denoms.add(nl);
+                            counts.add(1);
+                        }
+                    }
+                    for(Integer c : counts) {
+                        if(c>=4) {
+                            fileIsValid = true;
+                            break;
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    System.out.println("File not found.");
+                    e.printStackTrace();
+                }
             }
-        } while (fileExists == false);
-        fileInput.close();
-        
-        // main loop for creating threads, make into List of threads?
-        Thread[] threads = new Thread[players];
-        for (int i = 0; i < players; i++) {
-            threads[i] = new Thread();
-            System.out.println("Player: " + threads[i].getName());
-        }
+        } while (fileIsValid == false);
 
         Integer numberOfCards = 8 * players;
         Random rand = new Random();
         try {
-            Integer valueRange = 15; // Card Value range from 1 to 15
-            FileWriter writeFile = new FileWriter(packFile);
-            for (Integer i = 0; i < numberOfCards; i++) {
-                Card newCard = new Card(rand.nextInt(valueRange) + 1);
-                writeFile.write(newCard.getValue().toString() + "\n"); 
-                // System.out.println(newCard.getValue());
+            // read pack
+            File f = new File(packFile);
+            Scanner fileReader = new Scanner(f);
+            ArrayList<String> denoms = new ArrayList<String>();
+            while(fileReader.hasNextLine()) {
+                denoms.add(fileReader.nextLine());
             }
+            // shuffle pack
+            Random r = new Random();
+            Collections.shuffle(denoms, r);
+            // ***
+            FileWriter writeFile = new FileWriter(packFile);
+            // dealing player hands
+            Card[][] playerHands = new Card[players][4];
+            for(Integer i=0;i<4;i++) {
+                for(Integer j=0;j<players;j++) {
+                    Integer value = Integer.parseInt(denoms.get(i*players + j));
+                    playerHands[j][i] = new Card(value);
+                    writeFile.write(value.toString() + "\n"); 
+                }
+            }
+            // dealing decks
+            Card[][] decks = new Card[players][4];
+            for(Integer i=4*players;i<8*players;i++) {
+                for(Integer j=0;j<players;j++) {
+                    Integer value = Integer.parseInt(denoms.get(i*players + j));
+                    decks[j][i] = new Card(value);
+                    writeFile.write(value.toString() + "\n"); 
+                }
+            }
+            // ***
+            fileReader.close();
             writeFile.close();
             System.out.println("Pack is set.");
         } catch (IOException e) {
@@ -80,8 +124,18 @@ public class CardGame {
             e.printStackTrace();
         }
 
+        // main loop for creating threads, make into List of threads?
+        Thread[] threads = new Thread[players];
+        for (int i = 0; i < players; i++) {
+            threads[i] = new Thread();
+            System.out.println("Player: " + threads[i].getName());
+        }
+        
 
 
+        // close remaining scanners ***
+        playerInput.close();
+        fileInput.close();
     }
 }
 
