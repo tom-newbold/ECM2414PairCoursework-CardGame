@@ -16,8 +16,9 @@ public class CardGame {
      * *DONE* player input and test validity 
      * *DONE* pack file input and validity
      * player threads created
-     * new card object created and written to pack file
+     * *DONE* new card object created and written to pack file
      * cards are distributed to make list of hands and decks for each player
+     *      NOTE: Order is 1 card to each player in a round robin until 4 cards, then decks 
      * output file is made for players and the decks EACH
      * wincondition checked upon each player, if no win is made
      * atomic action of drawing, checking win condition and discarding for player threads
@@ -59,7 +60,6 @@ public class CardGame {
         Thread[] threads = new Thread[players];
         for (int i = 0; i < players; i++) {
             threads[i] = new Thread();
-            threads[i].start();
             System.out.println("Player: " + threads[i].getName());
         }
 
@@ -70,8 +70,8 @@ public class CardGame {
             FileWriter writeFile = new FileWriter(packFile);
             for (Integer i = 0; i < numberOfCards; i++) {
                 Card newCard = new Card(rand.nextInt(valueRange) + 1);
-                writeFile.write(newCard.getValue()); // text file has red blocks???
-                System.out.println(newCard.getValue());
+                writeFile.write(newCard.getValue().toString() + "\n"); 
+                // System.out.println(newCard.getValue());
             }
             writeFile.close();
             System.out.println("Pack is set.");
@@ -79,6 +79,8 @@ public class CardGame {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+
+
 
     }
 }
