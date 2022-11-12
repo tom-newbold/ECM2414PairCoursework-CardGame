@@ -82,8 +82,6 @@ public class CardGame {
             }
         } while (fileIsValid == false);
 
-        Integer numberOfCards = 8 * players;
-        Random rand = new Random();
         try {
             // read pack
             File f = new File(packFile);
