@@ -55,7 +55,6 @@ public class CardGame {
             packFile = fileInput.nextLine();
             File f = new File(packFile);
             if (f.exists()) {
-                System.out.println("file exists");
                 // validity check
                 ArrayList<String> denoms = new ArrayList<String>();
                 ArrayList<Integer> counts = new ArrayList<Integer>();
@@ -63,7 +62,6 @@ public class CardGame {
                     fileReader = new Scanner(f);
                     while(fileReader.hasNextLine()) {
                         String nl = fileReader.nextLine();
-                        System.out.println(nl);
                         if(denoms.contains(nl)) {
                             Integer i = denoms.indexOf(nl.replace("\n",""));
                             counts.set(i,counts.get(i)+1);
@@ -72,8 +70,6 @@ public class CardGame {
                             counts.add(1);
                         }
                     }
-                    //System.out.println(denoms);
-                    //System.out.println(counts);
                     for(Integer c : counts) {
                         if(c>=4) {
                             fileIsValid = true;
@@ -96,7 +92,7 @@ public class CardGame {
             fileReader = new Scanner(f);
             ArrayList<String> denoms = new ArrayList<String>();
             while(fileReader.hasNextLine()) {
-                denoms.add(fileReader.nextLine());
+                denoms.add(fileReader.nextLine().replace("\n",""));
             }
             // shuffle pack
             Random r = new Random();
@@ -115,7 +111,7 @@ public class CardGame {
             for(Integer i=4;i<8;i++) {
                 for(Integer j=0;j<players;j++) {
                     Integer value = Integer.parseInt(denoms.get(i*players + j));
-                    deckCards[j][i] = new Card(value);
+                    deckCards[j][i-4] = new Card(value);
                     writeFile.write(value.toString() + "\n"); 
                 }
             }
@@ -151,20 +147,25 @@ public class CardGame {
                 pt.start();
             }
             // pausing main thread
-            try {
-                Thread.currentThread().wait();
-            } catch (InterruptedException e) {}
-            for(PlayerThread pt : playerThreads) {
-                if(pt.isInterrupted()) {
-                    winPlayer = Integer.parseInt(pt.getName());
-                } else {
+            synchronized(Thread.currentThread()) {
+                try {
+                    Thread.currentThread().wait();
+                } catch (InterruptedException e) {}
+                for(PlayerThread pt : playerThreads) {
+                    if(pt.winFlag) {
+                        winPlayer = Integer.parseInt(pt.getName());
+                        //System.out.println("Winplayer internal:: "+Integer.toString(winPlayer));
+                    }
                     pt.interrupt();
                 }
             }
         }
 
-        // TODO: winner here
-            
+        System.out.println("player:"+ Integer.toString(winPlayer));
+        for(Card c : playerThreads[winPlayer].getPlayer().hand) {
+            System.out.println(c.getValue());
+        }
+
         // close remaining scanners ***
         playerInput.close();
         fileInput.close();
