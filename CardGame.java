@@ -27,6 +27,7 @@ public class CardGame {
      * *DONE* atomic action of drawing, checking win condition and discarding for player threads
      * *DONE* atomic action of drawing from top of deck and add from bottom of deck
      * *DONE* wincondition is met and player that has one notifies other players so game is stopped
+     * TODO : Synchronise file writing
      */
 
     public static Integer players;
@@ -87,6 +88,7 @@ public class CardGame {
         Card[][] deckCards = new Card[players][4];
         Deck[] decks = new Deck[players];
         try {
+            FileWriter writeFile = new FileWriter("log.txt");
             // read pack
             File f = new File(packFile);
             fileReader = new Scanner(f);
@@ -97,14 +99,11 @@ public class CardGame {
             // shuffle pack
             Random r = new Random();
             Collections.shuffle(denoms, r);
-            // ***
-            FileWriter writeFile = new FileWriter("log.txt");
             // dealing player hands
             for(Integer i=0;i<4;i++) {
                 for(Integer j=0;j<players;j++) {
                     Integer value = Integer.parseInt(denoms.get(i*players + j));
                     playerHands[j][i] = new Card(value);
-                    writeFile.write(value.toString() + "\n"); 
                 }
             }
             // dealing decks
@@ -112,7 +111,6 @@ public class CardGame {
                 for(Integer j=0;j<players;j++) {
                     Integer value = Integer.parseInt(denoms.get(i*players + j));
                     deckCards[j][i-4] = new Card(value);
-                    writeFile.write(value.toString() + "\n"); 
                 }
             }
             decks = new Deck[players];
@@ -121,49 +119,65 @@ public class CardGame {
             }
             // ***
             fileReader.close();
+            //System.out.println("Pack is set.");
+        
+
+            // main loop for creating threads, make into List of threads?
+            PlayerThread[] playerThreads = new PlayerThread[players];
+            for (Integer p = 1; p < players+1; p++) {
+                Card[] pHand = playerHands[p-1];
+                // announce player hands
+                writeFile.write(String.format("player %d inital hand %d %d %d %d\n",
+                    p,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                playerThreads[p-1] = new PlayerThread(Thread.currentThread(), writeFile, p, pHand, decks[p-1], decks[p%players]);
+                playerThreads[p-1].setName(Integer.toString(p));
+            }
+
+            Integer winPlayer = 0;
+            for(PlayerThread pt : playerThreads) {
+                if(pt.getPlayer().winCondition()) {
+                    // announce pre-game win condition
+                    winPlayer = Integer.parseInt(pt.getName());
+                    writeFile.write(String.format("player %d wins\n",(winPlayer+1)));
+                    break;
+                }
+            }
+
+            if(winPlayer==0) {
+                // announce decks
+                for(Integer d=0; d<players;d++) {
+                    Card[] deck = decks[d].getDeck();
+                    writeFile.write(String.format("deck%d contents: %d %d %d %d\n",
+                        (d+1),deck[0].getValue(),deck[1].getValue(),deck[2].getValue(),deck[3].getValue()));
+                }
+                for(PlayerThread pt : playerThreads) {
+                    pt.start();
+                }
+                // pausing main thread
+                synchronized(Thread.currentThread()) {
+                    try {
+                        Thread.currentThread().wait();
+                    } catch (InterruptedException e) {}
+                    // interrupt all threads
+                    for(PlayerThread pt : playerThreads) { pt.interrupt(); }
+                    for(PlayerThread pt : playerThreads) {
+                        if(pt.winFlag) {
+                            winPlayer = Integer.parseInt(pt.getName());
+                            // announce winner and hand
+                            writeFile.write(String.format("player %d wins\n",winPlayer));
+                            Card[] pHand = pt.getPlayer().getHand();
+                            writeFile.write(String.format("player %d hand %d %d %d %d\n",
+                                winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                            break;
+                        }
+                    }
+                }
+            }
+            
             writeFile.close();
-            System.out.println("Pack is set.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        }
-
-        // main loop for creating threads, make into List of threads?
-        PlayerThread[] playerThreads = new PlayerThread[players];
-        for (Integer p = 0; p < players; p++) {
-            playerThreads[p] = new PlayerThread(Thread.currentThread(), p, playerHands[p], decks[p], decks[(p+1)%players]);
-            playerThreads[p].setName(Integer.toString(p));
-        }
-
-        Integer winPlayer = -1;
-        for(PlayerThread pt : playerThreads) {
-            if(pt.getPlayer().winCondition()) {
-                winPlayer = Integer.parseInt(pt.getName());
-                break;
-            }
-        }
-        if(winPlayer<0) {
-            for(PlayerThread pt : playerThreads) {
-                pt.start();
-            }
-            // pausing main thread
-            synchronized(Thread.currentThread()) {
-                try {
-                    Thread.currentThread().wait();
-                } catch (InterruptedException e) {}
-                for(PlayerThread pt : playerThreads) {
-                    if(pt.winFlag) {
-                        winPlayer = Integer.parseInt(pt.getName());
-                        //System.out.println("Winplayer internal:: "+Integer.toString(winPlayer));
-                    }
-                    pt.interrupt();
-                }
-            }
-        }
-
-        System.out.println("player:"+ Integer.toString(winPlayer));
-        for(Card c : playerThreads[winPlayer].getPlayer().hand) {
-            System.out.println(c.getValue());
         }
 
         // close remaining scanners ***

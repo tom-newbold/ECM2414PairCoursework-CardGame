@@ -27,4 +27,12 @@ public class Deck {
         this.deck.add(c);
         notify();
     }
+
+    public Card[] getDeck() {
+        Card[] d = new Card[this.deck.size()];
+        for(Integer i=0; i<d.length;i++) {
+            d[i] = this.deck.get(i);
+        }
+        return d;
+    }
 }

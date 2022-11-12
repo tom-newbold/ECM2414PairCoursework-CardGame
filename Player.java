@@ -1,11 +1,15 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Player {
-    public Integer playerID;
-    public ArrayList<Card> hand = new ArrayList<Card>(); // TODO:::
+    private FileWriter wFile;
+    private Integer playerID;
+    private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
-    public Player(Integer pID, Card[] cards) {
+    public Player(FileWriter fileWriter, Integer pID, Card[] cards) {
+        this.wFile = fileWriter;
         this.playerID = pID;
         this.preferredDenom = this.playerID;
         for (Card c : cards) {
@@ -18,7 +22,12 @@ public class Player {
      * @param d The deck to draw from
      */
     private void drawCard(Deck d) throws InterruptedException {
-        this.hand.add(d.drawTopCard());
+        Card drawnCard = d.drawTopCard();
+        try {
+            this.wFile.write(String.format("Player %d draws a %d from deck %d\n",
+                this.playerID, drawnCard.getValue(), this.playerID));
+        } catch (IOException e) {}
+        this.hand.add(drawnCard);
     }
 
     /**
@@ -49,6 +58,10 @@ public class Player {
         }
         Card choice = toDiscard.get(choice_i);
         this.hand.remove(choice); // removed by object
+        try {
+            this.wFile.write(String.format("Player %d discards a %d to deck %d\n",
+                this.playerID, choice.getValue(), ((this.playerID-1)%CardGame.players)+1));
+        } catch (IOException e) {}
         return choice;
     }
 
@@ -61,6 +74,10 @@ public class Player {
     public void atomicTurn(Deck d1, Deck d2) throws InterruptedException {
         this.drawCard(d1);
         d2.addCard(this.discardCard());
+        try {
+            this.wFile.write(String.format("player %d current hand %d %d %d %d\n",
+                this.playerID,this.hand.get(0).getValue(),this.hand.get(1).getValue(),this.hand.get(2).getValue(),this.hand.get(3).getValue()));
+        } catch (IOException e) {}
     }
 
     /**
@@ -77,5 +94,13 @@ public class Player {
             }
         }
         return win;
+    }
+    
+    public Card[] getHand() {
+        Card[] h = new Card[this.hand.size()];
+        for(Integer i=0; i<h.length;i++) {
+            h[i] = this.hand.get(i);
+        }
+        return h;
     }
 }
