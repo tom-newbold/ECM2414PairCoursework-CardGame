@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Player {
-    private Integer playerID;
-    private ArrayList<Card> hand = new ArrayList<Card>();
+    public Integer playerID;
+    public ArrayList<Card> hand = new ArrayList<Card>(); // TODO:::
     private Integer preferredDenom;
     public Player(Integer pID, Card[] cards) {
         this.playerID = pID;
