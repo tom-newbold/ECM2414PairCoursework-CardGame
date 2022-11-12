@@ -23,10 +23,10 @@ public class CardGame {
      * *DONE* cards are distributed to make list of hands and decks for each player
      *      NOTE: Order is 1 card to each player in a round robin until 4 cards, then decks 
      * output file is made for players and the decks EACH
-     * wincondition checked upon each player, if no win is made
-     * atomic action of drawing, checking win condition and discarding for player threads
-     * atomic action of drawing from top of deck and add from bottom of deck
-     * wincondition is met and player that has one notifies other players so game is stopped
+     * *DONE* wincondition checked upon each player, if no win is made
+     * *DONE* atomic action of drawing, checking win condition and discarding for player threads
+     * *DONE* atomic action of drawing from top of deck and add from bottom of deck
+     * *DONE* wincondition is met and player that has one notifies other players so game is stopped
      */
 
     public static Integer players;
