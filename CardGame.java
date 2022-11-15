@@ -133,7 +133,7 @@ public class CardGame {
                 // announce player hands
                 writeFile.write(String.format("Player %d inital hand %d %d %d %d\n",
                     p,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
-                playerThreads[p-1] = new PlayerThread(Thread.currentThread(), writeFile, p, pHand, decks[p-1], decks[p%players]);
+                playerThreads[p-1] = new PlayerThread(Thread.currentThread(), writeFile, playerOutputs[p-1], p, pHand, decks[p-1], decks[p%players]);
                 playerThreads[p-1].setName(Integer.toString(p));
             }
 
@@ -143,6 +143,7 @@ public class CardGame {
                     // announce pre-game win condition
                     winPlayer = Integer.parseInt(pt.getName());
                     writeFile.write(String.format("Player %d wins\n",(winPlayer+1)));
+                    playerOutputs[winPlayer].write(String.format("Player %d wins\n",(winPlayer+1)));
                     break;
                 }
             }
@@ -165,8 +166,10 @@ public class CardGame {
                     // interrupt all threads
                     for(PlayerThread pt : playerThreads) {
                         pt.interrupt();
-                        synchronized (writeFile) {
-                            writeFile.write(String.format("Player %d terminated\n",pt.getPlayer().playerID));
+                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pt.getPlayer().playerID]}) {
+                            synchronized (fw) {
+                                fw.write(String.format("Player %d terminated\n",pt.getPlayer().playerID));
+                            }
                         }
                     }
                     // ***
@@ -174,11 +177,13 @@ public class CardGame {
                         if(pt.winFlag) {
                             winPlayer = Integer.parseInt(pt.getName());
                             // announce winner and hand
-                            synchronized (writeFile) {
-                                writeFile.write(String.format("Player %d wins\n",winPlayer));
-                                Card[] pHand = pt.getPlayer().getHand();
-                                writeFile.write(String.format("Player %d hand %d %d %d %d\n",
-                                    winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                            for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[winPlayer]}) {
+                                synchronized (fw) {
+                                    fw.write(String.format("Player %d wins\n",winPlayer));
+                                    Card[] pHand = pt.getPlayer().getHand();
+                                    fw.write(String.format("Player %d hand %d %d %d %d\n",
+                                        winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                                }
                             }
                             break;
                         }
@@ -187,11 +192,11 @@ public class CardGame {
             }
             // writes deck output
             FileWriter[] deckOutputs = new FileWriter[players];
-            for(Integer i=0; i<players; i++) {
-                deckOutputs[i] = new FileWriter(String.format("deck%d_output.txt", i));
+            for(Integer d=0; d<players; d++) {
+                deckOutputs[d] = new FileWriter(String.format("deck%d_output.txt", d+1));
                 Card[] deck = decks[d].getDeck();
-                deckOutputs[i].write(String.format("Deck%d contents: %d %d %d %d\n",
-                    (i+1),deck[0].getValue(),deck[1].getValue(),deck[2].getValue(),deck[3].getValue()));
+                deckOutputs[d].write(String.format("Deck%d contents: %d %d %d %d\n",
+                    (d+1),deck[0].getValue(),deck[1].getValue(),deck[2].getValue(),deck[3].getValue()));
             }
             // closing output writers
             for(Integer i=0; i<players; i++) {
