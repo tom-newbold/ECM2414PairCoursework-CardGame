@@ -26,9 +26,9 @@ public class Player {
     private void drawCard(Deck d) throws InterruptedException {
         Card drawnCard = d.drawTopCard();
         for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
-            synchronized (this.wFile) {
+            synchronized (fw) {
                 try {
-                    this.wFile.write(String.format("Player %d draws a %d from deck %d\n",
+                    fw.write(String.format("Player %d draws a %d from deck %d\n",
                         this.playerID, drawnCard.getValue(), this.playerID));
                 } catch (IOException e) {}
             }
@@ -65,9 +65,9 @@ public class Player {
         Card choice = toDiscard.get(choice_i);
         this.hand.remove(choice); // removed by object
         for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
-            synchronized (this.wFile) {
+            synchronized (fw) {
                 try {
-                    this.wFile.write(String.format("Player %d discards a %d to deck %d\n",
+                    fw.write(String.format("Player %d discards a %d to deck %d\n",
                         this.playerID, choice.getValue(), ((this.playerID-1)%CardGame.players)+2));
                 } catch (IOException e) {}
             }

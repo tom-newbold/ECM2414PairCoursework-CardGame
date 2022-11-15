@@ -91,7 +91,7 @@ public class CardGame {
             FileWriter writeFile = new FileWriter("output.txt");
             FileWriter[] playerOutputs = new FileWriter[players];
             for(Integer i=0; i<players; i++) {
-                playerOutputs[i] = new FileWriter(String.format("player%d_output.txt", i));
+                playerOutputs[i] = new FileWriter(String.format("player%d_output.txt", i+1));
             }
             // read pack
             File f = new File(packFile);
@@ -166,7 +166,7 @@ public class CardGame {
                     // interrupt all threads
                     for(PlayerThread pt : playerThreads) {
                         pt.interrupt();
-                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pt.getPlayer().playerID]}) {
+                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pt.getPlayer().playerID-1]}) {
                             synchronized (fw) {
                                 fw.write(String.format("Player %d terminated\n",pt.getPlayer().playerID));
                             }
@@ -177,7 +177,7 @@ public class CardGame {
                         if(pt.winFlag) {
                             winPlayer = Integer.parseInt(pt.getName());
                             // announce winner and hand
-                            for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[winPlayer]}) {
+                            for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[winPlayer-1]}) {
                                 synchronized (fw) {
                                     fw.write(String.format("Player %d wins\n",winPlayer));
                                     Card[] pHand = pt.getPlayer().getHand();
@@ -195,8 +195,11 @@ public class CardGame {
             for(Integer d=0; d<players; d++) {
                 deckOutputs[d] = new FileWriter(String.format("deck%d_output.txt", d+1));
                 Card[] deck = decks[d].getDeck();
-                deckOutputs[d].write(String.format("Deck%d contents: %d %d %d %d\n",
-                    (d+1),deck[0].getValue(),deck[1].getValue(),deck[2].getValue(),deck[3].getValue()));
+                String deckContents = String.format("Deck%d contents:",d+1);
+                for(Integer c=0;c<deck.length;c++) {
+                    deckContents = deckContents + String.format(" %d",deck[c].getValue());
+                }
+                deckOutputs[d].write(deckContents+"\n");
             }
             // closing output writers
             for(Integer i=0; i<players; i++) {
