@@ -6,7 +6,7 @@ import java.io.IOException;
 public class Player {
     private FileWriter wFile_g;
     private FileWriter wFile;
-    public Integer playerID; // TODO: make private
+    private Integer playerID;
     private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
     public Player(FileWriter fileWriter_global, FileWriter fileWriter_individual, Integer pID, Card[] cards) {
@@ -117,4 +117,6 @@ public class Player {
         }
         return h;
     }
+
+    public Integer getPlayerId() { return this.playerID; }
 }

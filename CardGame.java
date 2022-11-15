@@ -8,26 +8,19 @@ import java.util.Random;
 import java.util.Collections;
 
 public class CardGame {
-    /**
-     * Takes input, checks validity
-     * Creates n Player threads
-     * Distributes cards, inital win condition check, distribute decks
-     * Start threads
-     */
 
     /* TASKS TO DO:
      * *DONE* player input and test validity 
      * *DONE* pack file input and validity
      * *DONE* player threads created
      * *DONE* new card object created and written to pack file
-     * *DONE* cards are distributed to make list of hands and decks for each player
-     *      NOTE: Order is 1 card to each player in a round robin until 4 cards, then decks 
-     * output file is made for players and the decks EACH
+     * *DONE* cards are distributed to make list of hands and decks for each player (NOTE: Order is 1 card to each player in a round robin until 4 cards, then decks )
+     * *DONE* output file is made for players and the decks EACH
      * *DONE* wincondition checked upon each player, if no win is made
      * *DONE* atomic action of drawing, checking win condition and discarding for player threads
      * *DONE* atomic action of drawing from top of deck and add from bottom of deck
      * *DONE* wincondition is met and player that has one notifies other players so game is stopped
-     * TODO : Synchronise file writing
+     * Synchronise file writing
      */
 
     public static Integer players;
@@ -166,9 +159,9 @@ public class CardGame {
                     // interrupt all threads
                     for(PlayerThread pt : playerThreads) {
                         pt.interrupt();
-                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pt.getPlayer().playerID-1]}) {
+                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pt.getPlayer().getPlayerId()-1]}) {
                             synchronized (fw) {
-                                fw.write(String.format("Player %d terminated\n",pt.getPlayer().playerID));
+                                fw.write(String.format("Player %d terminated\n",pt.getPlayer().getPlayerId()));
                             }
                         }
                     }
