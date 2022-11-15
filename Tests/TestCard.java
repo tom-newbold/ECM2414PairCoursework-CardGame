@@ -2,7 +2,7 @@ package Tests;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import Main.Card;
+import CardGame.Card;
 
 public class TestCard {
     @Test
