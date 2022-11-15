@@ -164,10 +164,12 @@ public class CardGame {
                         if(pt.winFlag) {
                             winPlayer = Integer.parseInt(pt.getName());
                             // announce winner and hand
-                            writeFile.write(String.format("player %d wins\n",winPlayer));
-                            Card[] pHand = pt.getPlayer().getHand();
-                            writeFile.write(String.format("player %d hand %d %d %d %d\n",
-                                winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                            synchronized (writeFile) {
+                                writeFile.write(String.format("player %d wins\n",winPlayer));
+                                Card[] pHand = pt.getPlayer().getHand();
+                                writeFile.write(String.format("player %d hand %d %d %d %d\n",
+                                    winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                            }
                             break;
                         }
                     }

@@ -72,12 +72,14 @@ public class Player {
      * @param d2 The deck to discard to
      */
     public void atomicTurn(Deck d1, Deck d2) throws InterruptedException {
-        this.drawCard(d1);
-        d2.addCard(this.discardCard());
-        try {
-            this.wFile.write(String.format("player %d current hand %d %d %d %d\n",
-                this.playerID,this.hand.get(0).getValue(),this.hand.get(1).getValue(),this.hand.get(2).getValue(),this.hand.get(3).getValue()));
-        } catch (IOException e) {}
+        synchronized (this.wFile) {
+            this.drawCard(d1);
+            d2.addCard(this.discardCard());
+            try {
+                this.wFile.write(String.format("player %d current hand %d %d %d %d\n",
+                    this.playerID,this.hand.get(0).getValue(),this.hand.get(1).getValue(),this.hand.get(2).getValue(),this.hand.get(3).getValue()));
+            } catch (IOException e) {}
+        }
     }
 
     /**
