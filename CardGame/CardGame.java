@@ -1,3 +1,4 @@
+package CardGame;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
@@ -81,10 +82,10 @@ public class CardGame {
         Card[][] deckCards = new Card[players][4];
         Deck[] decks = new Deck[players];
         try {
-            FileWriter writeFile = new FileWriter("output.txt");
+            FileWriter writeFile = new FileWriter("./output.txt");
             FileWriter[] playerOutputs = new FileWriter[players];
             for(Integer i=0; i<players; i++) {
-                playerOutputs[i] = new FileWriter(String.format("player%d_output.txt", i+1));
+                playerOutputs[i] = new FileWriter(String.format("./player%d_output.txt", i+1));
             }
             // read pack
             File f = new File(packFile);
@@ -186,7 +187,7 @@ public class CardGame {
             // writes deck output
             FileWriter[] deckOutputs = new FileWriter[players];
             for(Integer d=0; d<players; d++) {
-                deckOutputs[d] = new FileWriter(String.format("deck%d_output.txt", d+1));
+                deckOutputs[d] = new FileWriter(String.format("./deck%d_output.txt", d+1));
                 Card[] deck = decks[d].getDeck();
                 String deckContents = String.format("Deck%d contents:",d+1);
                 for(Integer c=0;c<deck.length;c++) {

@@ -1,4 +1,4 @@
-package Cards;
+package CardGame;
 
 public class Card {
     private Integer value;
