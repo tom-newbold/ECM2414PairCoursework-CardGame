@@ -88,7 +88,7 @@ public class CardGame {
         Card[][] deckCards = new Card[players][4];
         Deck[] decks = new Deck[players];
         try {
-            FileWriter writeFile = new FileWriter("log.txt");
+            FileWriter writeFile = new FileWriter("output.txt");
             FileWriter[] playerOutputs = new FileWriter[players];
             for(Integer i=0; i<players; i++) {
                 playerOutputs[i] = new FileWriter(String.format("player%d_output.txt", i));
