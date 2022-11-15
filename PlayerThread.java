@@ -28,7 +28,7 @@ public class PlayerThread extends Thread {
                     }
                     synchronized (this.wFile) {
                         try {
-                            this.wFile.write(String.format("player %s exits\n", Thread.currentThread().getName()));
+                            this.wFile.write(String.format("Player %s exits\n", Thread.currentThread().getName()));
                         } catch (IOException e) {}
                     }
                 }

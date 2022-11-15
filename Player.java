@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class Player {
     private FileWriter wFile;
-    private Integer playerID;
+    public Integer playerID; // TODO: make private
     private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
     public Player(FileWriter fileWriter, Integer pID, Card[] cards) {
@@ -23,10 +23,12 @@ public class Player {
      */
     private void drawCard(Deck d) throws InterruptedException {
         Card drawnCard = d.drawTopCard();
-        try {
-            this.wFile.write(String.format("Player %d draws a %d from deck %d\n",
-                this.playerID, drawnCard.getValue(), this.playerID));
-        } catch (IOException e) {}
+        synchronized (this.wFile) {
+            try {
+                this.wFile.write(String.format("Player %d draws a %d from deck %d\n",
+                    this.playerID, drawnCard.getValue(), this.playerID));
+            } catch (IOException e) {}
+        }
         this.hand.add(drawnCard);
     }
 
@@ -58,10 +60,12 @@ public class Player {
         }
         Card choice = toDiscard.get(choice_i);
         this.hand.remove(choice); // removed by object
-        try {
-            this.wFile.write(String.format("Player %d discards a %d to deck %d\n",
-                this.playerID, choice.getValue(), ((this.playerID-1)%CardGame.players)+1));
-        } catch (IOException e) {}
+        synchronized (this.wFile) {
+            try {
+                this.wFile.write(String.format("Player %d discards a %d to deck %d\n",
+                    this.playerID, choice.getValue(), ((this.playerID-1)%CardGame.players)+2));
+            } catch (IOException e) {}
+        }
         return choice;
     }
 
@@ -72,11 +76,11 @@ public class Player {
      * @param d2 The deck to discard to
      */
     public void atomicTurn(Deck d1, Deck d2) throws InterruptedException {
+        this.drawCard(d1);
+        d2.addCard(this.discardCard());
         synchronized (this.wFile) {
-            this.drawCard(d1);
-            d2.addCard(this.discardCard());
             try {
-                this.wFile.write(String.format("player %d current hand %d %d %d %d\n",
+                this.wFile.write(String.format("Player %d current hand %d %d %d %d\n",
                     this.playerID,this.hand.get(0).getValue(),this.hand.get(1).getValue(),this.hand.get(2).getValue(),this.hand.get(3).getValue()));
             } catch (IOException e) {}
         }
