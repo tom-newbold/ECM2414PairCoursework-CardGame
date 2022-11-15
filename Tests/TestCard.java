@@ -8,18 +8,34 @@ public class TestCard {
     @Test
     public void testCreateCard() {
         Card c = new Card(1);
-        assertEquals(c.getValue(),1);
+        assertEquals("Value set incorrectly",1,(int)c.getValue());
+        assertEquals("Age initialized incorrectly",0,(int)c.getAge());
     }
 
     @Test
-    public void testGetValue() {}
+    public void testGetValue() {
+        Card c = new Card(1);
+        assertEquals("getValue() failed",1,(int)c.getValue());
+    }
 
     @Test
-    public void testGetAge() {}
+    public void testGetAge() {
+        Card c = new Card(1);
+        assertEquals("getAge() failed",0,(int)c.getAge());
+    }
 
     @Test
-    public void testAge() {}
+    public void testAge() {
+        Card c = new Card(1);
+        c.age();
+        assertEquals("age() failed",1,(int)c.getAge());
+    }
 
     @Test
-    public void testResetAge() {}
+    public void testResetAge() {
+        Card c = new Card(1);
+        c.age();
+        c.resetAge();
+        assertEquals("age() failed",0,(int)c.getAge());
+    }
 }
