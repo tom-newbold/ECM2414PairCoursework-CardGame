@@ -43,5 +43,5 @@ public class PlayerThread extends Thread {
         }
     }
 
-    public Player getPlayer() { return player; }
+    public Player getPlayer() { return player; } // TODO: modify to getPlayerId() to prevent stacked calls
 }
