@@ -118,6 +118,4 @@ public class Player {
         }
         return h;
     }
-
-    public Integer getPlayerId() { return this.playerID; }
 }

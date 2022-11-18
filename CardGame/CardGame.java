@@ -27,6 +27,7 @@ public class CardGame {
 
     public static Integer players;
     public static String packFile;
+    public static Integer winPlayer;
 
     public static void main(String[] args) {
 
@@ -132,18 +133,18 @@ public class CardGame {
                 playerThreads[p-1].setName(Integer.toString(p));
             }
 
-            Integer winPlayer = 0;
+            CardGame.winPlayer = 0;
             for(PlayerThread pt : playerThreads) {
                 if(pt.getPlayer().winCondition()) {
                     // announce pre-game win condition
-                    winPlayer = Integer.parseInt(pt.getName());
-                    writeFile.write(String.format("Player %d wins\n",(winPlayer+1)));
-                    playerOutputs[winPlayer].write(String.format("Player %d wins\n",(winPlayer+1)));
+                    CardGame.winPlayer = Integer.parseInt(pt.getName());
+                    writeFile.write(String.format("Player %d wins\n",(CardGame.winPlayer+1)));
+                    playerOutputs[CardGame.winPlayer].write(String.format("Player %d wins\n",(CardGame.winPlayer+1)));
                     break;
                 }
             }
 
-            if(winPlayer==0) {
+            if(CardGame.winPlayer==0) {
                 // announce decks
                 for(Integer d=0; d<players;d++) {
                     Card[] deck = decks[d].getDeck();
@@ -161,23 +162,24 @@ public class CardGame {
                     // interrupt all threads
                     for(PlayerThread pt : playerThreads) {
                         pt.interrupt();
-                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pt.getPlayer().getPlayerId()-1]}) {
+                        Integer pId = Integer.parseInt(pt.getName());
+                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pId-1]}) {
                             synchronized (fw) {
-                                fw.write(String.format("Player %d terminated\n",pt.getPlayer().getPlayerId()));
+                                fw.write(String.format("Player %d terminated\n",pId));
                             }
                         }
                     }
                     // ***
                     for(PlayerThread pt : playerThreads) {
                         if(pt.winFlag) {
-                            winPlayer = Integer.parseInt(pt.getName());
+                            CardGame.winPlayer = Integer.parseInt(pt.getName());
                             // announce winner and hand
-                            for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[winPlayer-1]}) {
+                            for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[CardGame.winPlayer-1]}) {
                                 synchronized (fw) {
-                                    fw.write(String.format("Player %d wins\n",winPlayer));
+                                    fw.write(String.format("Player %d wins\n",CardGame.winPlayer));
                                     Card[] pHand = pt.getPlayer().getHand();
                                     fw.write(String.format("Player %d hand %d %d %d %d\n",
-                                        winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                                        CardGame.winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
                                 }
                             }
                             break;
