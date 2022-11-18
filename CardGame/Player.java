@@ -10,6 +10,7 @@ public class Player {
     private Integer playerID;
     private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
+    private boolean interrupted = false;
     public Player(FileWriter fileWriter_global, FileWriter fileWriter_individual, Integer pID, Card[] cards) {
         this.wFile_g = fileWriter_global;
         this.wFile = fileWriter_individual;
@@ -83,8 +84,11 @@ public class Player {
      * @param d2 The deck to discard to
      */
     public void atomicTurn(Deck d1, Deck d2) throws InterruptedException {
+        if(this.interrupted) { throw new InterruptedException(); }
         this.drawCard(d1);
+        //if(this.interrupted) { this.alert(); }
         d2.addCard(this.discardCard());
+        //if(this.interrupted) { this.alert(); }
         for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
             synchronized (fw) {
                 try {
@@ -94,6 +98,19 @@ public class Player {
             }
         }
     }
+
+    /*
+    private void alert() {
+        for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
+            synchronized (fw) {
+                try {
+                    fw.write(String.format("Player %d has informed player %d that player %d has won\n",
+                        CardGame.winPlayer, this.playerID, CardGame.winPlayer));
+                } catch (IOException e) {}
+            }
+        }
+    }
+    */
 
     /**
      * Checks the players cards to see if they have a winning hand.
@@ -117,5 +134,9 @@ public class Player {
             h[i] = this.hand.get(i);
         }
         return h;
+    }
+    
+    public void interrupt() {
+        this.interrupted = true;
     }
 }

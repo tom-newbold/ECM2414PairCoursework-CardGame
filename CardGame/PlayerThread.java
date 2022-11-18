@@ -9,7 +9,7 @@ public class PlayerThread extends Thread {
     private Player player;
     private Deck drawDeck;
     private Deck discardDeck;
-    public Boolean winFlag = false;
+    //public Boolean winFlag = false;
     public PlayerThread(Thread MAIN_THREAD, FileWriter fileWriter_global, FileWriter fileWriter_individual, Integer pId, Card[] playerHand, Deck draw, Deck discard) {
         this.MAIN_THREAD = MAIN_THREAD;
         this.wFile_g = fileWriter_global;
@@ -24,18 +24,28 @@ public class PlayerThread extends Thread {
             try {
                 this.player.atomicTurn(drawDeck,discardDeck);
                 if(this.player.winCondition()) {
-                    this.winFlag = true;
-                    // notify main thread
-                    synchronized(this.MAIN_THREAD) {
-                        this.MAIN_THREAD.notify();
-                    }
-                    for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
-                        synchronized (fw) {
-                            try {
-                                fw.write(String.format("Player %s exits\n", Thread.currentThread().getName()));
-                            } catch (IOException e) {}
+                    //this.winFlag = true;
+                    if(CardGame.winPlayer==0) {
+                        CardGame.winPlayer = Integer.parseInt(Thread.currentThread().getName());
+                    
+                        // notify main thread
+                        synchronized(this.MAIN_THREAD) {
+                            this.MAIN_THREAD.notify();
                         }
+                        for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
+                            synchronized (fw) {
+                                try {
+                                    fw.write(String.format("Player %s wins\n", Thread.currentThread().getName()));
+                                    fw.write(String.format("Player %s exits\n", Thread.currentThread().getName()));
+                                    Card[] pHand = this.getPlayer().getHand();
+                                    fw.write(String.format("Player %d final hand %d %d %d %d\n",
+                                        CardGame.winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
+                                } catch (IOException e) {}
+                            }
+                        }
+                        System.out.println(String.format("Player %d wins",CardGame.winPlayer));
                     }
+                    Thread.currentThread().interrupt();
                 }
             } catch (InterruptedException e) {
                 break;

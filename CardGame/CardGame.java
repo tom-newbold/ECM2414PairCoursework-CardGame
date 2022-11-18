@@ -22,12 +22,11 @@ public class CardGame {
      * *DONE* atomic action of drawing from top of deck and add from bottom of deck
      * *DONE* wincondition is met and player that has one notifies other players so game is stopped
      * Synchronise file writing
-     * TODO: Volatile winPlayer??
      */
 
     public static Integer players;
     public static String packFile;
-    public static Integer winPlayer;
+    public volatile static Integer winPlayer;
 
     public static void main(String[] args) {
 
@@ -138,8 +137,9 @@ public class CardGame {
                 if(pt.getPlayer().winCondition()) {
                     // announce pre-game win condition
                     CardGame.winPlayer = Integer.parseInt(pt.getName());
-                    writeFile.write(String.format("Player %d wins\n",(CardGame.winPlayer+1)));
-                    playerOutputs[CardGame.winPlayer].write(String.format("Player %d wins\n",(CardGame.winPlayer+1)));
+                    for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[CardGame.winPlayer-1]})
+                    { fw.write(String.format("Player %d wins\n",CardGame.winPlayer)); }
+                    System.out.println(String.format("Player %d wins\n",CardGame.winPlayer));
                     break;
                 }
             }
@@ -159,33 +159,20 @@ public class CardGame {
                     try {
                         Thread.currentThread().wait();
                     } catch (InterruptedException e) {}
-                    // interrupt all threads
-                    for(PlayerThread pt : playerThreads) {
-                        pt.interrupt();
-                        Integer pId = Integer.parseInt(pt.getName());
-                        for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pId-1]}) {
-                            synchronized (fw) {
-                                fw.write(String.format("Player %d terminated\n",pId));
-                            }
-                        }
-                    }
-                    // ***
-                    for(PlayerThread pt : playerThreads) {
-                        if(pt.winFlag) {
-                            CardGame.winPlayer = Integer.parseInt(pt.getName());
-                            // announce winner and hand
-                            for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[CardGame.winPlayer-1]}) {
-                                synchronized (fw) {
-                                    fw.write(String.format("Player %d wins\n",CardGame.winPlayer));
-                                    Card[] pHand = pt.getPlayer().getHand();
-                                    fw.write(String.format("Player %d hand %d %d %d %d\n",
-                                        CardGame.winPlayer,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
-                                }
-                            }
-                            break;
-                        }
-                    }
                 }
+                // interrupt all threads
+                for(PlayerThread pt : playerThreads) {
+                    pt.getPlayer().interrupt();
+                    Integer pId = Integer.parseInt(pt.getName());
+                    /*
+                    for(FileWriter fw : new FileWriter[]{writeFile, playerOutputs[pId-1]}) {
+                        synchronized (fw) {
+                            fw.write(String.format("Player %d terminated\n",pId));
+                        }
+                    }
+                    */
+                }
+                // ^ now out of synchronised block
             }
             // writes deck output
             FileWriter[] deckOutputs = new FileWriter[players];
