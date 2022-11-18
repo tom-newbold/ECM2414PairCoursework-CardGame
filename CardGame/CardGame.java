@@ -22,6 +22,7 @@ public class CardGame {
      * *DONE* atomic action of drawing from top of deck and add from bottom of deck
      * *DONE* wincondition is met and player that has one notifies other players so game is stopped
      * Synchronise file writing
+     * TODO: move logs into playerThread?
      */
 
     public static Integer players;

@@ -9,7 +9,6 @@ public class PlayerThread extends Thread {
     private Player player;
     private Deck drawDeck;
     private Deck discardDeck;
-    //public Boolean winFlag = false;
     public PlayerThread(Thread MAIN_THREAD, FileWriter fileWriter_global, FileWriter fileWriter_individual, Integer pId, Card[] playerHand, Deck draw, Deck discard) {
         this.MAIN_THREAD = MAIN_THREAD;
         this.wFile_g = fileWriter_global;
@@ -24,7 +23,6 @@ public class PlayerThread extends Thread {
             try {
                 this.player.atomicTurn(drawDeck,discardDeck);
                 if(this.player.winCondition()) {
-                    //this.winFlag = true;
                     if(CardGame.winPlayer==0) {
                         CardGame.winPlayer = Integer.parseInt(Thread.currentThread().getName());
                     

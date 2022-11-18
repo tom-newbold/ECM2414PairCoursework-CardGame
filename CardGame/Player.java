@@ -86,9 +86,7 @@ public class Player {
     public void atomicTurn(Deck d1, Deck d2) throws InterruptedException {
         if(this.interrupted) { throw new InterruptedException(); }
         this.drawCard(d1);
-        //if(this.interrupted) { this.alert(); }
         d2.addCard(this.discardCard());
-        //if(this.interrupted) { this.alert(); }
         for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
             synchronized (fw) {
                 try {
@@ -98,19 +96,6 @@ public class Player {
             }
         }
     }
-
-    /*
-    private void alert() {
-        for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
-            synchronized (fw) {
-                try {
-                    fw.write(String.format("Player %d has informed player %d that player %d has won\n",
-                        CardGame.winPlayer, this.playerID, CardGame.winPlayer));
-                } catch (IOException e) {}
-            }
-        }
-    }
-    */
 
     /**
      * Checks the players cards to see if they have a winning hand.
