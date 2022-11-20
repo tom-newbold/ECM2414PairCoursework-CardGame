@@ -101,7 +101,7 @@ public class CardGame {
             }
         
 
-            // main loop for creating threads, make into List of threads?
+            // loop for creating threads
             PlayerThread[] playerThreads = new PlayerThread[players];
             for (Integer p = 1; p < players+1; p++) {
                 Card[] pHand = playerHands[p-1];
