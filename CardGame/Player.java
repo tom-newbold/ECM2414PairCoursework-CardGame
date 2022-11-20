@@ -66,9 +66,11 @@ public class Player {
      * @param d2 The deck to discard to
      */
     public void atomicTurn(Deck d1, Deck d2) throws InterruptedException {
+        for(Card c : this.hand) { c.age(); }
         this.drawCard(d1);
         Card drawnCard = this.hand.get(4);
         Card discardCard = this.discardCard();
+        discardCard.resetAge();
         d2.addCard(discardCard);
         synchronized (this.fw) {
             try {
