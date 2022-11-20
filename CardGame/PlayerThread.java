@@ -63,5 +63,8 @@ public class PlayerThread extends Thread {
         }
     }
 
+    /**
+     * @return Player associated with thread
+     */
     public Player getPlayer() { return player; }
 }
