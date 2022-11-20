@@ -60,7 +60,8 @@ public class Player {
 
     /**
      * Performs a players full turn atomically (before checking win condition);
-     * Player's hand will only ever contain 4 cards outside of this function
+     * Player's hand will only ever contain 4 cards outside of this function;
+     * Writes drawn and discarded cards, as well as hand, to the output file
      * @param d1 The deck to draw from
      * @param d2 The deck to discard to
      */

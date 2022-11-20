@@ -16,6 +16,11 @@ public class PlayerThread extends Thread {
         this.discardDeck = discard;
     }
 
+    /**
+     * Thread mainloop - runs player's atomic turn, checks for win condition;
+     * If player has won, set CardGame.winPlayer to PlayerID and interrupt player thread;
+     * Also writes win anouncements / final hands to the player's output file
+     */
     public void run() {
         while(!Thread.currentThread().isInterrupted()) {
             try {
