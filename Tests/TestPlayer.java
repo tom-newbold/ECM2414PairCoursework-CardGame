@@ -22,7 +22,7 @@ public class TestPlayer {
         Card[] hand = new Card[4];
         for(Integer i=0;i<4;i++) { hand[i] = new Card(i+1); }
         FileWriter f = new FileWriter("test_out.txt");
-        Player p = new Player(f, f, 1, hand);
+        Player p = new Player(f, 1, hand);
         p.atomicTurn(d1, d2);
         assertEquals("Draw unsuccessful", d1.getDeck().length, 1);
         assertEquals("Discard unsuccessful", d2.getDeck().length, 3); 
@@ -35,13 +35,13 @@ public class TestPlayer {
         Card[] losingCards = new Card[4];
         for(Integer i=0;i<4;i++) { losingCards[i] = new Card(i+1); }
         FileWriter f = new FileWriter("test_out.txt",true);
-        Player p = new Player(f, f, 0, losingCards);
+        Player p = new Player(f, 0, losingCards);
         
         assertFalse("winCondition() failed", p.winCondition());
         
         Card[] winningCards = new Card[4];
         for(Integer i=0;i<4;i++) { winningCards[i] = new Card(1); }
-        Player q = new Player(f, f, 1, winningCards);
+        Player q = new Player(f, 1, winningCards);
         
         assertTrue("winCondition() failed", q.winCondition());
     }
@@ -51,7 +51,7 @@ public class TestPlayer {
         Card[] hand = new Card[4];
         for(Integer i=0;i<4;i++) { hand[i] = new Card(i+1); }
         FileWriter f = new FileWriter("test_out.txt",true);
-        Player p = new Player(f, f, 0, hand);
+        Player p = new Player(f, 0, hand);
         
         assertNotEquals("getHand() failed", hand, p.getHand());
     }

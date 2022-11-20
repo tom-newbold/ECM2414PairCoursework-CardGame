@@ -5,15 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Player {
-    private FileWriter wFile_g;
-    private FileWriter wFile;
+    private FileWriter fw;
     private Integer playerID;
     private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
     private boolean interrupted = false;
-    public Player(FileWriter fileWriter_global, FileWriter fileWriter_individual, Integer pID, Card[] cards) {
-        this.wFile_g = fileWriter_global;
-        this.wFile = fileWriter_individual;
+    public Player(FileWriter fileWriter, Integer pID, Card[] cards) {
+        this.fw = fileWriter;
         this.playerID = pID;
         this.preferredDenom = this.playerID;
         for (Card c : cards) {
@@ -27,13 +25,11 @@ public class Player {
      */
     private void drawCard(Deck d) throws InterruptedException {
         Card drawnCard = d.drawTopCard();
-        for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
-            synchronized (fw) {
-                try {
-                    fw.write(String.format("Player %d draws a %d from deck %d\n",
-                        this.playerID, drawnCard.getValue(), this.playerID));
-                } catch (IOException e) {}
-            }
+        synchronized (this.fw) {
+            try {
+                this.fw.write(String.format("Player %d draws a %d from deck %d\n",
+                    this.playerID, drawnCard.getValue(), this.playerID));
+            } catch (IOException e) {}
         }
         this.hand.add(drawnCard);
     }
@@ -66,14 +62,12 @@ public class Player {
         }
         Card choice = toDiscard.get(choice_i);
         this.hand.remove(choice); // removed by object
-        for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
-            synchronized (fw) {
-                try {
-                    fw.write(String.format("Player %d discards a %d to deck %d\n",
-                        this.playerID, choice.getValue(), ((this.playerID-1)%CardGame.players)+2));
-                } catch (IOException e) {} catch (NullPointerException n) {}
-                // null pointer exception added to pass test - output file is not being tested
-            }
+        synchronized (this.fw) {
+            try {
+                this.fw.write(String.format("Player %d discards a %d to deck %d\n",
+                    this.playerID, choice.getValue(), ((this.playerID-1)%CardGame.players)+2));
+            } catch (IOException e) {} catch (NullPointerException n) {}
+            // null pointer exception added to pass test - output file is not being tested
         }
         return choice;
     }
@@ -88,13 +82,12 @@ public class Player {
         if(this.interrupted) { throw new InterruptedException(); }
         this.drawCard(d1);
         d2.addCard(this.discardCard());
-        for(FileWriter fw : new FileWriter[]{this.wFile_g, this.wFile}) {
-            synchronized (fw) {
-                try {
-                    fw.write(String.format("Player %d current hand %d %d %d %d\n",
-                        this.playerID,this.hand.get(0).getValue(),this.hand.get(1).getValue(),this.hand.get(2).getValue(),this.hand.get(3).getValue()));
-                } catch (IOException e) {}
-            }
+        synchronized (this.fw) {
+            try {
+                this.fw.write(String.format("Player %d current hand %d %d %d %d\n",
+                    this.playerID,this.hand.get(0).getValue(),this.hand.get(1).getValue(),
+                    this.hand.get(2).getValue(),this.hand.get(3).getValue()));
+            } catch (IOException e) {}
         }
     }
 

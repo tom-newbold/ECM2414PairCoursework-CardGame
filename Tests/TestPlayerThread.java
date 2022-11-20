@@ -18,7 +18,7 @@ public class TestPlayerThread {
         Card[] hand = new Card[4];
         for(Integer i=0;i<4;i++) { hand[i] = new Card(i+1); }
         FileWriter f = new FileWriter("test_out.txt");
-        PlayerThread pt = new PlayerThread(Thread.currentThread(), f, f, 1, hand, d1, d1);
+        PlayerThread pt = new PlayerThread(Thread.currentThread(), f, 1, hand, d1, d1);
         pt.start();
         try {
             Thread.sleep(500);
@@ -35,7 +35,7 @@ public class TestPlayerThread {
         Card[] hand = new Card[4];
         for(Integer i=0;i<4;i++) { hand[i] = new Card(i+1); }
         FileWriter f = new FileWriter("test_out.txt");
-        PlayerThread pt = new PlayerThread(Thread.currentThread(), f, f, 1, hand, d1, d1);
+        PlayerThread pt = new PlayerThread(Thread.currentThread(), f, 1, hand, d1, d1);
         //assertEquals("getPlayer() failed: playerID incorrect",1, Integer.parseInt(pt.getName()));
         for(Integer i=0;i<4;i++) { 
             assertEquals("getplayer() failed: hand ",hand[i].getValue(), pt.getPlayer().getHand()[i].getValue());
