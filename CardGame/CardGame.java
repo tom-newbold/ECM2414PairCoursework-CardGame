@@ -9,22 +9,6 @@ import java.util.Random;
 import java.util.Collections;
 
 public class CardGame {
-
-    /* TASKS TO DO:
-     * *DONE* player input and test validity 
-     * *DONE* pack file input and validity
-     * *DONE* player threads created
-     * *DONE* new card object created and written to pack file
-     * *DONE* cards are distributed to make list of hands and decks for each player (NOTE: Order is 1 card to each player in a round robin until 4 cards, then decks )
-     * *DONE* output file is made for players and the decks EACH
-     * *DONE* wincondition checked upon each player, if no win is made
-     * *DONE* atomic action of drawing, checking win condition and discarding for player threads
-     * *DONE* atomic action of drawing from top of deck and add from bottom of deck
-     * *DONE* wincondition is met and player that has one notifies other players so game is stopped
-     * Synchronise file writing
-     * TODO: move logs into playerThread?
-     */
-
     public static Integer players;
     public static String packFile;
     public volatile static Integer winPlayer;
@@ -41,7 +25,6 @@ public class CardGame {
             }
             players = playerInput.nextInt();
         } while (players < 0);
-        //playerinput.close();
         
         Scanner fileInput = new Scanner(System.in); // Second scanner object needed for file input
         Scanner fileReader = new Scanner(System.in);
@@ -116,9 +99,6 @@ public class CardGame {
             for(Integer i=0;i<players;i++) {
                 decks[i] = new Deck(deckCards[i]);
             }
-            // ***
-            fileReader.close();
-            //System.out.println("Pack is set.");
         
 
             // main loop for creating threads, make into List of threads?
@@ -144,14 +124,6 @@ public class CardGame {
             }
 
             if(CardGame.winPlayer==0) {
-                // announce decks
-                /*
-                for(Integer d=0; d<players;d++) {
-                    Card[] deck = decks[d].getDeck();
-                    writeFile.write(String.format("Deck%d contents: %d %d %d %d\n",
-                        (d+1),deck[0].getValue(),deck[1].getValue(),deck[2].getValue(),deck[3].getValue()));
-                }
-                */
                 for(PlayerThread pt : playerThreads) {
                     pt.start();
                 }
@@ -163,8 +135,7 @@ public class CardGame {
                 }
                 // interrupt all threads
                 for(PlayerThread pt : playerThreads) {
-                    pt.getPlayer().interrupt();
-                    //Integer pId = Integer.parseInt(pt.getName());
+                    pt.interrupt();
                 }
             }
             // writes deck output
@@ -189,6 +160,7 @@ public class CardGame {
         }
 
         // close remaining scanners ***
+        fileReader.close();
         playerInput.close();
         fileInput.close();
         fileReader.close();

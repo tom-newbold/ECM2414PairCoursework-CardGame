@@ -21,7 +21,7 @@ public class Deck {
     }
 
     /**
-     * Adds a card to the (bottom of?) the deck
+     * Adds a card to the bottom of the deck
      * @param c The card to be added to the deck
      */
     public synchronized void addCard(Card c) {
@@ -29,6 +29,9 @@ public class Deck {
         notify();
     }
 
+    /**
+     * @return The deck as an array of Cards
+     */
     public Card[] getDeck() {
         Card[] d = new Card[this.deck.size()];
         for(Integer i=0; i<d.length;i++) {

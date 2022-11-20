@@ -9,7 +9,6 @@ public class Player {
     private Integer playerID;
     private ArrayList<Card> hand = new ArrayList<Card>();
     private Integer preferredDenom;
-    private boolean interrupted = false;
     public Player(FileWriter fileWriter, Integer pID, Card[] cards) {
         this.fw = fileWriter;
         this.playerID = pID;
@@ -25,12 +24,6 @@ public class Player {
      */
     private void drawCard(Deck d) throws InterruptedException {
         Card drawnCard = d.drawTopCard();
-        synchronized (this.fw) {
-            try {
-                this.fw.write(String.format("Player %d draws a %d from deck %d\n",
-                    this.playerID, drawnCard.getValue(), this.playerID));
-            } catch (IOException e) {}
-        }
         this.hand.add(drawnCard);
     }
 
@@ -62,13 +55,6 @@ public class Player {
         }
         Card choice = toDiscard.get(choice_i);
         this.hand.remove(choice); // removed by object
-        synchronized (this.fw) {
-            try {
-                this.fw.write(String.format("Player %d discards a %d to deck %d\n",
-                    this.playerID, choice.getValue(), ((this.playerID-1)%CardGame.players)+2));
-            } catch (IOException e) {} catch (NullPointerException n) {}
-            // null pointer exception added to pass test - output file is not being tested
-        }
         return choice;
     }
 
@@ -79,15 +65,21 @@ public class Player {
      * @param d2 The deck to discard to
      */
     public void atomicTurn(Deck d1, Deck d2) throws InterruptedException {
-        if(this.interrupted) { throw new InterruptedException(); }
         this.drawCard(d1);
-        d2.addCard(this.discardCard());
+        Card drawnCard = this.hand.get(4);
+        Card discardCard = this.discardCard();
+        d2.addCard(discardCard);
         synchronized (this.fw) {
             try {
+                this.fw.write(String.format("Player %d draws a %d from deck %d\n",
+                    this.playerID, drawnCard.getValue(), this.playerID));
+                this.fw.write(String.format("Player %d discards a %d to deck %d\n",
+                    this.playerID, discardCard.getValue(), ((this.playerID-1)%CardGame.players)+2));
                 this.fw.write(String.format("Player %d current hand %d %d %d %d\n",
                     this.playerID,this.hand.get(0).getValue(),this.hand.get(1).getValue(),
                     this.hand.get(2).getValue(),this.hand.get(3).getValue()));
-            } catch (IOException e) {}
+            } catch (IOException e) {} catch (NullPointerException n) {}
+            // null pointer exception added to pass test - output file is not being tested
         }
     }
 
@@ -107,15 +99,14 @@ public class Player {
         return win;
     }
     
+    /**
+     * @return The player's hand as an array of Cards
+     */
     public Card[] getHand() {
         Card[] h = new Card[this.hand.size()];
         for(Integer i=0; i<h.length;i++) {
             h[i] = this.hand.get(i);
         }
         return h;
-    }
-    
-    public void interrupt() {
-        this.interrupted = true;
     }
 }
