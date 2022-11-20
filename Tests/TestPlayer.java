@@ -27,7 +27,6 @@ public class TestPlayer {
         assertEquals("Draw unsuccessful", d1.getDeck().length, 1);
         assertEquals("Discard unsuccessful", d2.getDeck().length, 3); 
         assertNotEquals(1,(int)d2.getDeck()[d2.getDeck().length-1].getValue());
-        //assertEquals(p, p);    
     }
 
     @Test
