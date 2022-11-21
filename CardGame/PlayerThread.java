@@ -14,6 +14,7 @@ public class PlayerThread extends Thread {
         this.player = new Player(fileWriter,pId,playerHand);
         this.drawDeck = draw;
         this.discardDeck = discard;
+        this.setName(Integer.toString(pId));
     }
 
     /**

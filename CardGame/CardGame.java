@@ -109,7 +109,6 @@ public class CardGame {
                 playerOutputs[p-1].write(String.format("Player %d inital hand %d %d %d %d\n",
                     p,pHand[0].getValue(),pHand[1].getValue(),pHand[2].getValue(),pHand[3].getValue()));
                 playerThreads[p-1] = new PlayerThread(Thread.currentThread(), playerOutputs[p-1], p, pHand, decks[p-1], decks[p%players]);
-                playerThreads[p-1].setName(Integer.toString(p));
             }
 
             CardGame.winPlayer = 0;
