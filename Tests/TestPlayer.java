@@ -51,7 +51,7 @@ public class TestPlayer {
         for(Integer i=0;i<4;i++) { cards[i] = new Card(2); }
         FileWriter f = new FileWriter("test_out.txt");
         Player p = new Player(f, 1, cards);
-        for(Integer i=0; i<10; i++) {
+        for(Integer i=0; i<8; i++) {
             for(Card c : p.getHand()) { c.resetAge(); }
             d1.getDeck()[0].age();
             d1.getDeck()[0].age();
