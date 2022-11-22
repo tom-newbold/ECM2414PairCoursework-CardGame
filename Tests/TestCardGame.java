@@ -16,7 +16,7 @@ public class TestCardGame {
     @Test
     public void testCardGame() {
         CardGame cg = new CardGame();
-        System.setIn(new StringReader("   "));
+        System.setIn(new StringReader("4\npack.txt"));
         cg.main();
         assertNotEquals(0, (int)CardGame.winPlayer);
         assertEquals(4, (int)CardGame.players);
