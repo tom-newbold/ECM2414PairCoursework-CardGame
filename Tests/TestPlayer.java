@@ -1,18 +1,24 @@
 package Tests;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-import CardGame.Card;
 import CardGame.CardGame;
+import CardGame.Card;
 import CardGame.Deck;
 import CardGame.Player;
 
 public class TestPlayer {
     // drawCard() and discardCard() methods are private;
     // They are tested by atomicTurn() tests 
+
+    @Before
+    public void preventDivideByZero() {
+        CardGame.players = 4;
+    }
 
     @Test
     public void testAtomicTurn() throws IOException, InterruptedException {

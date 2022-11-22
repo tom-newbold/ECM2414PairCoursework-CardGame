@@ -13,29 +13,33 @@ import CardGame.CardGame;
 
 public class TestCardGame {
     @Test
-    public void testCardGameDuplicate() throws IOException {
-        String textInputs = "8\npack.txt\nbin/pack_8player.txt";
-        InputStream testInput = new ByteArrayInputStream(textInputs.getBytes(StandardCharsets.UTF_8));
-        System.setIn(testInput);
-        CardGame.main(null);
-        assertNotEquals(0, (int)CardGame.winPlayer);
-        assertEquals(8, (int)CardGame.players);
-        assertEquals("bin/pack_8player.txt", CardGame.packFile);
-        testInput.close();
-        CardGame.winPlayer = 0;
-    }
-
-    @Test
     public void testCardGame() throws IOException {
-        String textInputs = "4\nnotapack.txt\nbin/pack.txt";
-        InputStream testInput = new ByteArrayInputStream(textInputs.getBytes(StandardCharsets.UTF_8));
-        System.setIn(testInput);
+        String inputs = "-1\n4\nnotapack.txt\nbin/pack.txt";
+        InputStream testInputStream = new ByteArrayInputStream(inputs.getBytes(StandardCharsets.UTF_8));
+        System.setIn(testInputStream);
         CardGame.main(null);
         assertNotEquals(0, (int)CardGame.winPlayer);
         assertEquals(4, (int)CardGame.players);
         assertEquals("bin/pack.txt", CardGame.packFile);
-        testInput.close();
+        testInputStream.close();
         CardGame.winPlayer = 0;
+        CardGame.players = 0;
+        CardGame.packFile = "";
+    }
+
+    @Test
+    public void testCardGameDuplicate() throws IOException {
+        String inputs = "a\n8\npack.txt\nbin/pack_8player.txt";
+        InputStream testInputStream_duplicate = new ByteArrayInputStream(inputs.getBytes(StandardCharsets.UTF_8));
+        System.setIn(testInputStream_duplicate);
+        CardGame.main(null);
+        assertNotEquals(0, (int)CardGame.winPlayer);
+        assertEquals(8, (int)CardGame.players);
+        assertEquals("bin/pack_8player.txt", CardGame.packFile);
+        testInputStream_duplicate.close();
+        CardGame.winPlayer = 0;
+        CardGame.players = 0;
+        CardGame.packFile = "";
     }
 
     @After

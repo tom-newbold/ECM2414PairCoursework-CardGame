@@ -14,7 +14,6 @@ public class CardGame {
     public volatile static Integer winPlayer = 0;
 
     public static void main(String[] args) {
-
         Scanner input = new Scanner(System.in);
         // Will loop until input is an integer and is postive
         System.out.println("Please enter a positive number of players:");
@@ -22,8 +21,8 @@ public class CardGame {
             try { players = Integer.parseInt(input.nextLine());
             } catch (NumberFormatException e) { System.out.println("Enter a valid number of players:"); }
         }
+        System.out.print(CardGame.players);
         
-        //Scanner fileInput = new Scanner(System.in); // Second scanner object needed for file input
         Scanner fileReader = new Scanner(System.in);
         Boolean fileIsValid = false;
         // input is used for file object creation to check if file exists, if not it will loop
@@ -160,8 +159,6 @@ public class CardGame {
 
         // close remaining scanners ***
         fileReader.close();
-        //playerInput.close();
-        //fileInput.close();
         input.close();
         fileReader.close();
     }

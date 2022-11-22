@@ -1,15 +1,22 @@
 package Tests;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
+import CardGame.CardGame;
 import CardGame.Card;
 import CardGame.Deck;
 import CardGame.PlayerThread;
 
 public class TestPlayerThread {
+    @Before
+    public void preventDivideByZero() {
+        CardGame.players = 4;
+    }
+
     @Test
     public void testRun() throws IOException {
         Card[] cards = new Card[10];
