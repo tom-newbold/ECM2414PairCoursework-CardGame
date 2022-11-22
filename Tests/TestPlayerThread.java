@@ -27,21 +27,20 @@ public class TestPlayerThread {
         assertEquals("run() failed: Player's hand does not contain 4 cards", 4, pt.getPlayer().getHand().length);
     }
 
-    // use this test?
     @Test
     public void testRun_Win() throws IOException {
         Card[] cards = new Card[4];
         Card[] hand = new Card[4];
         for(Integer i=0;i<4;i++) {
             cards[i] = new Card(1);
-            hand[i] = new Card(2);
+            hand[i] = new Card(2+i);
         }
         Deck d1 = new Deck(cards);
         FileWriter f = new FileWriter("test_out.txt");
         PlayerThread pt = new PlayerThread(Thread.currentThread(), f, 1, hand, d1, d1);
         pt.start();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (Exception e) {}
         assertTrue("Player failed to win game", pt.getPlayer().winCondition());
     }

@@ -5,15 +5,6 @@ import static org.junit.Assert.*;
 import CardGame.Card;
 
 public class TestCard {
-    /*
-    @Test
-    public void testCreateCard() {
-        Card c = new Card(1);
-        assertEquals("Value set incorrectly",1,(int)c.getValue());
-        assertEquals("Age initialized incorrectly",0,(int)c.getAge());
-    }
-    */
-
     @Test
     public void testGetValue() {
         Card c = new Card(1);

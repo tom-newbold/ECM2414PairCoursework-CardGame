@@ -26,8 +26,10 @@ public class TestPlayer {
         assertEquals("Draw unsuccessful", d1.getDeck().length, 1);
         assertEquals("Discard unsuccessful", d2.getDeck().length, 3);
         assertEquals("Hand card count mismatch", 4, p.getHand().length);
-        assertEquals("Discard condition failed: card with value 1 should be retained", 1, (int)p.getHand()[3].getValue());
-        assertNotEquals("Discard condition failed: card with value 1 should be retained", 1, (int)d2.getDeck()[2].getValue());
+        assertEquals("Discard condition failed: card with value 1 should be retained",
+            1, (int)p.getHand()[3].getValue());
+        assertNotEquals("Discard condition failed: card with value 1 should be retained",
+            1, (int)d2.getDeck()[2].getValue());
     }
 
     @Test
@@ -56,6 +58,19 @@ public class TestPlayer {
             d1.getDeck()[0].age();
             p.atomicTurn(d1, d1);
             assertEquals("discardCard() failed: oldest card not discarded", 3, (int)d1.getDeck()[0].getValue());
+        }
+    }
+
+    @Test
+    public void testAtomicTurn_discardNonPrefered() throws IOException, InterruptedException {
+        Deck d1 = new Deck(new Card[]{new Card(3)});
+        Card[] cards = new Card[4];
+        for(Integer i=0;i<4;i++) { cards[i] = new Card(2); }
+        FileWriter f = new FileWriter("test_out.txt");
+        Player p = new Player(f, 2, cards);
+        for(Integer i=0; i<8; i++) {
+            p.atomicTurn(d1, d1);
+            assertEquals("discardCard() failed: non-prefered denomination not discarded", 3, (int)d1.getDeck()[0].getValue());
         }
     }
 
