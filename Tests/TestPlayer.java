@@ -8,6 +8,7 @@ import java.io.IOException;
 import CardGame.Card;
 import CardGame.Deck;
 import CardGame.Player;
+import CardGame.CardGame;
 
 public class TestPlayer {
     // drawCard() and discardCard() methods are private;
@@ -28,6 +29,35 @@ public class TestPlayer {
         assertEquals("Hand card count mismatch", 4, p.getHand().length);
         assertEquals("Discard condition failed: card with value 1 should be retained", 1, (int)p.getHand()[3].getValue());
         assertNotEquals("Discard condition failed: card with value 1 should be retained", 1, (int)d2.getDeck()[2].getValue());
+    }
+
+    @Test
+    public void testAtomicTurn_Win() throws IOException, InterruptedException {
+        Card[] deck = new Card[]{new Card(1), new Card(2)};
+        Deck d1 = new Deck(deck);
+        Card[] cards = new Card[4];
+        cards[0] = new Card(2);
+        for(Integer i=1;i<4;i++) { cards[i] = new Card(1); }
+        FileWriter f = new FileWriter("test_out.txt");
+        Player p = new Player(f, 1, cards);
+        p.atomicTurn(d1, d1);
+        assertTrue("player turn failed to induce a winning state", p.winCondition());
+    }
+
+    @Test
+    public void testAtomicTurn_discardByAge() throws IOException, InterruptedException {
+        Deck d1 = new Deck(new Card[]{new Card(3)});
+        Card[] cards = new Card[4];
+        for(Integer i=0;i<4;i++) { cards[i] = new Card(2); }
+        FileWriter f = new FileWriter("test_out.txt");
+        Player p = new Player(f, 1, cards);
+        for(Integer i=0; i<10; i++) {
+            for(Card c : p.getHand()) { c.resetAge(); }
+            d1.getDeck()[0].age();
+            d1.getDeck()[0].age();
+            p.atomicTurn(d1, d1);
+            assertEquals("discardCard() failed: oldest card not discarded", 3, (int)d1.getDeck()[0].getValue());
+        }
     }
 
     @Test

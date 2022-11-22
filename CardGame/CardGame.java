@@ -11,7 +11,7 @@ import java.util.Collections;
 public class CardGame {
     public static Integer players;
     public static String packFile;
-    public volatile static Integer winPlayer;
+    public volatile static Integer winPlayer = 0;
 
     public static void main(String[] args) {
 
@@ -111,7 +111,7 @@ public class CardGame {
                 playerThreads[p-1] = new PlayerThread(Thread.currentThread(), playerOutputs[p-1], p, pHand, decks[p-1], decks[p%players]);
             }
 
-            CardGame.winPlayer = 0;
+            //CardGame.winPlayer = 0;
             for(PlayerThread pt : playerThreads) {
                 if(pt.getPlayer().winCondition()) {
                     // announce pre-game win condition
