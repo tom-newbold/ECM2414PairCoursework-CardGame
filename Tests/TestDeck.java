@@ -63,12 +63,4 @@ public class TestDeck {
         Deck deck = new Deck(cards);
         assertNotEquals("getDeck() failed", cards, deck.getDeck());
     }
-
-    @Test
-    public void testGetDeckDuplicate() {
-        Card[] cards = new Card[4];
-        for(Integer i=0;i<4;i++) { cards[i] = new Card(i+1); }
-        Deck deck = new Deck(cards);
-        assertEquals("getDeck() failed", deck, deck.getDeck());
-    }
 }

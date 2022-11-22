@@ -1,0 +1,127 @@
+Player 1 inital hand 7 5 1 8
+Player 2 inital hand 7 1 6 3
+Player 3 inital hand 4 2 1 6
+Player 4 inital hand 1 8 8 6
+Deck1 contents: 5 5 8 3
+Deck2 contents: 5 3 3 2
+Deck3 contents: 6 4 2 7
+Deck4 contents: 4 2 4 7
+Player 1 draws a 5 from deck 1
+Player 2 draws a 5 from deck 2
+Player 2 discards a 3 to deck 3
+Player 2 current hand 7 1 6 5
+Player 1 discards a 7 to deck 2
+Player 4 draws a 4 from deck 4
+Player 3 draws a 6 from deck 3
+Player 4 discards a 8 to deck 5
+Player 2 draws a 3 from deck 2
+Player 4 current hand 1 8 6 4
+Player 3 discards a 4 to deck 4
+Player 4 draws a 2 from deck 4
+Player 3 current hand 2 1 6 6
+Player 4 discards a 1 to deck 5
+Player 2 discards a 1 to deck 3
+Player 4 current hand 8 6 4 2
+Player 2 current hand 7 6 5 3
+Player 4 draws a 4 from deck 4
+Player 2 draws a 3 from deck 2
+Player 3 draws a 4 from deck 3
+Player 2 discards a 3 to deck 3
+Player 1 current hand 5 1 8 5
+Player 2 current hand 7 6 5 3
+Player 2 draws a 2 from deck 2
+Player 4 discards a 6 to deck 5
+Player 2 discards a 6 to deck 3
+Player 1 draws a 5 from deck 1
+Player 2 current hand 7 5 3 2
+Player 1 discards a 5 to deck 2
+Player 2 draws a 7 from deck 2
+Player 1 current hand 1 8 5 5
+Player 2 discards a 7 to deck 3
+Player 1 draws a 8 from deck 1
+Player 3 discards a 1 to deck 4
+Player 1 discards a 8 to deck 2
+Player 3 current hand 2 6 6 4
+Player 2 current hand 7 5 3 2
+Player 3 draws a 2 from deck 3
+Player 2 draws a 5 from deck 2
+Player 3 discards a 2 to deck 4
+Player 4 current hand 8 4 2 4
+Player 3 current hand 2 6 6 4
+Player 4 draws a 7 from deck 4
+Player 3 draws a 7 from deck 3
+Player 2 discards a 3 to deck 3
+Player 1 current hand 1 5 5 8
+Player 2 current hand 7 5 2 5
+Player 3 discards a 4 to deck 4
+Player 3 current hand 2 6 6 7
+Player 4 discards a 7 to deck 5
+Player 2 draws a 8 from deck 2
+Player 1 draws a 3 from deck 1
+Player 4 current hand 8 4 2 4
+Player 3 draws a 3 from deck 3
+Player 1 discards a 3 to deck 2
+Player 3 discards a 7 to deck 4
+Player 2 discards a 7 to deck 3
+Player 3 current hand 2 6 6 3
+Player 1 current hand 1 5 5 8
+Player 4 draws a 4 from deck 4
+Player 3 draws a 1 from deck 3
+Player 2 current hand 5 2 5 8
+Player 3 discards a 6 to deck 4
+Player 4 discards a 8 to deck 5
+Player 1 draws a 8 from deck 1
+Player 4 current hand 4 2 4 4
+Player 3 current hand 2 6 3 1
+Player 2 draws a 3 from deck 2
+Player 3 draws a 3 from deck 3
+Player 2 discards a 3 to deck 3
+Player 4 draws a 1 from deck 4
+Player 1 discards a 5 to deck 2
+Player 4 discards a 1 to deck 5
+Player 2 current hand 5 2 5 8
+Player 3 discards a 1 to deck 4
+Player 2 draws a 5 from deck 2
+Player 4 current hand 4 2 4 4
+Player 1 current hand 1 5 8 8
+Player 4 draws a 2 from deck 4
+Player 1 draws a 1 from deck 1
+Player 4 discards a 2 to deck 5
+Player 1 discards a 8 to deck 2
+Player 2 discards a 5 to deck 3
+Player 1 current hand 1 5 8 1
+Player 3 current hand 2 6 3 3
+Player 1 draws a 6 from deck 1
+Player 3 draws a 6 from deck 3
+Player 1 discards a 8 to deck 2
+Player 3 discards a 6 to deck 4
+Player 2 current hand 5 2 5 8
+Player 4 current hand 4 2 4 4
+Player 2 draws a 8 from deck 2
+Player 4 draws a 4 from deck 4
+Player 4 discards a 2 to deck 5
+Player 3 current hand 2 3 3 6
+Player 1 current hand 1 5 1 6
+Player 4 current hand 4 4 4 4
+Player 2 discards a 8 to deck 3
+Player 1 draws a 7 from deck 1
+Player 3 draws a 7 from deck 3
+Player 2 current hand 5 2 5 8
+Player 1 terminated
+Player 4 exits
+Player 2 terminated
+Player 2 draws a 8 from deck 2
+Player 3 discards a 6 to deck 4
+Player 2 discards a 8 to deck 3
+Player 3 current hand 2 3 3 7
+Player 2 current hand 5 2 5 8
+Player 1 discards a 7 to deck 2
+Player 1 current hand 1 5 1 6
+Player 3 terminated
+Player 4 terminated
+Player 4 draws a 7 from deck 4
+Player 4 wins
+Player 4 hand 4 4 4 4
+Player 4 discards a 7 to deck 5
+Player 4 current hand 4 4 4 4
+Player 4 exits

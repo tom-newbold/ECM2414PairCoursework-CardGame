@@ -5,8 +5,10 @@ import org.junit.runners.Suite;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
+//import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 
 import CardGame.CardGame;
 
@@ -17,7 +19,9 @@ public class TestCardGame {
     
     @Test
     public void testCardGame() {
-        StringReader testInput = new InputStream(new StringReader("4\npack.txt"));
+        String textInputs = "4\npack.txt";
+        InputStream testInput = new ByteArrayInputStream(textInputs.getBytes(StandardCharsets.UTF_8)); 
+        //StringReader testInput = new InputStream(new StringReader("4\npack.txt"));
         System.setIn(testInput);
         CardGame.main(null);
         assertNotEquals(0, (int)CardGame.winPlayer);
