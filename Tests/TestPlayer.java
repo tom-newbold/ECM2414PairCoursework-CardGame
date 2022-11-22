@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Method;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -13,11 +14,62 @@ import CardGame.Player;
 
 public class TestPlayer {
     // drawCard() and discardCard() methods are private;
-    // They are tested by atomicTurn() tests 
+    // They are tested using reflection, but also within atomicTurn() tests 
 
     @Before
     public void preventDivideByZero() {
         CardGame.players = 4;
+    }
+
+    @Test
+    public void testDrawCard() throws IOException, NoSuchMethodException {
+        Deck d1 = new Deck(new Card[]{ new Card(1) });
+        Card[] cards = new Card[4];
+        for(Integer i=0;i<4;i++) { cards[i] = new Card(2); }
+        FileWriter f = new FileWriter("test_out.txt");
+        Player p = new Player(f, 1, cards);
+
+        Method _drawCard = Player.class.getDeclaredMethod("drawCard", Deck.class);
+        _drawCard.setAccessible(true);
+        try {
+            _drawCard.invoke(p, d1);
+        } catch (Exception e) {}
+        _drawCard.setAccessible(false);
+
+        Card[] resultingHand = p.getHand();
+        assertEquals("drawCard() failed: hand does not contain 5 cards", 5, (int)resultingHand.length);
+        for(Integer i=0; i<4;i++) {
+            assertEquals("drawCard() failed: residual deck mismatch", 2, (int)resultingHand[i].getValue());
+        }
+        assertEquals("drawCard() failed: residual deck mismatch", 1, (int)resultingHand[4].getValue());
+    }
+
+    @Test
+    public void testDiscardCard() throws IOException, NoSuchMethodException {
+        Card[] cards = new Card[5];
+        for(Integer i=0;i<4;i++) { cards[i] = new Card(2); }
+        cards[4] = new Card(1);
+        FileWriter f = new FileWriter("test_out.txt");
+        Player[] players = new Player[]{ new Player(f, 1, cards), new Player(f, 2, cards) };
+
+        Method _discardCard = Player.class.getDeclaredMethod("discardCard");
+        _discardCard.setAccessible(true);
+        try {
+            for( Player p : players ) {
+                _discardCard.invoke(p);
+            }
+        } catch (Exception e) {}
+        _discardCard.setAccessible(false);
+
+        Card[] resultingHand;
+        for(Integer i : new Integer[]{ 1,2 }) {
+            resultingHand = players[i-1].getHand();
+            assertEquals("discardCard() failed: hand does not contain 4 cards", 4, (int)resultingHand.length);
+            for(Integer j=0; j<3; j++) {
+                assertEquals("discardCard() failed: residual deck mismatch", 2, (int)resultingHand[j].getValue());
+            }
+            assertEquals("discardCard() failed: residual deck mismatch", (int)i, (int)resultingHand[3].getValue());
+        }
     }
 
     @Test
