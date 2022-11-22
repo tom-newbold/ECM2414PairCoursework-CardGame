@@ -8,7 +8,6 @@ import java.io.IOException;
 import CardGame.Card;
 import CardGame.Deck;
 import CardGame.Player;
-import CardGame.CardGame;
 
 public class TestPlayer {
     // drawCard() and discardCard() methods are private;
