@@ -41,7 +41,7 @@ public class TestPlayer {
         FileWriter f = new FileWriter("test_out.txt");
         Player p = new Player(f, 1, cards);
         p.atomicTurn(d1, d1);
-        assertTrue("player turn failed to induce a winning state", p.winCondition());
+        assertTrue("Player turn failed to induce a winning state", p.winCondition());
     }
 
     @Test

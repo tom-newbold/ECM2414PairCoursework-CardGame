@@ -36,6 +36,6 @@ public class TestCard {
         Card c = new Card(1);
         c.age();
         c.resetAge();
-        assertEquals("age() failed",0,(int)c.getAge());
+        assertEquals("resetAge() failed",0,(int)c.getAge());
     }
 }

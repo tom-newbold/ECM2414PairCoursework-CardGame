@@ -42,6 +42,7 @@ public class CardGame {
                     fileReader = new Scanner(f);
                     while(fileReader.hasNextLine()) {
                         String nl = fileReader.nextLine();
+                        if(Integer.parseInt(nl)<0) { break; }
                         if(denoms.contains(nl)) {
                             Integer i = denoms.indexOf(nl.replace("\n",""));
                             counts.set(i,counts.get(i)+1);

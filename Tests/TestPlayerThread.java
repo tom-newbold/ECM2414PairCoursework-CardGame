@@ -24,7 +24,7 @@ public class TestPlayerThread {
             Thread.sleep(500);
         } catch (Exception e) {}
         pt.interrupt();
-        assertEquals(4, pt.getPlayer().getHand().length);
+        assertEquals("run() failed: Player's hand does not contain 4 cards", 4, pt.getPlayer().getHand().length);
     }
 
     // use this test?
@@ -43,9 +43,7 @@ public class TestPlayerThread {
         try {
             Thread.sleep(1000);
         } catch (Exception e) {}
-        //pt.interrupt();
-        //assertEquals(4, pt.getPlayer().getHand().length);
-        assertTrue("player failed to win game", pt.getPlayer().winCondition());
+        assertTrue("Player failed to win game", pt.getPlayer().winCondition());
     }
 
     @Test
@@ -59,7 +57,7 @@ public class TestPlayerThread {
         PlayerThread pt = new PlayerThread(Thread.currentThread(), f, 1, hand, d1, d1);
         Card[] playerHand = pt.getPlayer().getHand();
         for(Integer i=0;i<4;i++) { 
-            assertEquals("getplayer() failed: hand ", hand[i].getValue(), playerHand[i].getValue());
+            assertEquals("getplayer() failed: hand mismatch", hand[i].getValue(), playerHand[i].getValue());
         }
     }
 }
