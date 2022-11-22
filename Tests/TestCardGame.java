@@ -16,13 +16,13 @@ import CardGame.CardGame;
 public class TestCardGame {  
     @Test
     public void testCardGame() throws IOException {
-        System.out.println(new java.io.File(".").getAbsolutePath());
-        String textInputs = "4\npack.txt";
+        //System.out.println(new java.io.File(".").getAbsolutePath());
+        String textInputs = "4\nbin/pack.txt";
         InputStream testInput = new ByteArrayInputStream(textInputs.getBytes(StandardCharsets.UTF_8));
         System.setIn(testInput);
         CardGame.main(null);
         assertNotEquals(0, (int)CardGame.winPlayer);
         assertEquals(4, (int)CardGame.players);
-        assertEquals("pack.txt", CardGame.packFile);
+        assertEquals("bin/pack.txt", CardGame.packFile);
     }
 }
