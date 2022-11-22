@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import CardGame.Card;
+import CardGame.CardGame;
 import CardGame.Deck;
 import CardGame.Player;
 

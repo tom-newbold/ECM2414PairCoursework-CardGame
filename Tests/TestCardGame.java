@@ -1,5 +1,7 @@
 package Tests;
 
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -7,17 +9,24 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-//imports to remove?
-import java.util.Scanner;
-import java.io.IOException;
-
 import CardGame.CardGame;
 
-public class TestCardGame {  
+public class TestCardGame {
     @Test
-    public void testCardGame() throws IOException {
-        //System.out.println(new java.io.File(".").getAbsolutePath());
-        String textInputs = "4\nbin/pack.txt";
+    public void testCardGameDuplicate() {
+        String textInputs = "8\npack.txt\nbin/pack_8player.txt";
+        InputStream testInput = new ByteArrayInputStream(textInputs.getBytes(StandardCharsets.UTF_8));
+        System.setIn(testInput);
+        CardGame.main(null);
+        assertNotEquals(0, (int)CardGame.winPlayer);
+        assertEquals(8, (int)CardGame.players);
+        assertEquals("bin/pack_8player.txt", CardGame.packFile);
+        //close scanner?
+    }
+
+    @Test
+    public void testCardGame() {
+        String textInputs = "4\nnotapack.txt\nbin/pack.txt";
         InputStream testInput = new ByteArrayInputStream(textInputs.getBytes(StandardCharsets.UTF_8));
         System.setIn(testInput);
         CardGame.main(null);
