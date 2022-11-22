@@ -21,6 +21,12 @@ public class TestCard {
     }
 
     @Test
+    public void testGetValueDuplicate() {
+        Card c = new Card(1);
+        assertNotEquals("getValue() failed",2,(int)c.getValue());
+    }
+
+    @Test
     public void testGetAge() {
         Card c = new Card(1);
         assertEquals("getAge() failed",0,(int)c.getAge());
@@ -29,7 +35,7 @@ public class TestCard {
     @Test
     public void testGetAgeDuplicate() {
         Card c = new Card(1);
-        assertNotEquals("getAge() failed",0,(int)c.getAge());
+        assertNotEquals("getAge() failed",1,(int)c.getAge());
     }
 
     @Test
@@ -45,5 +51,13 @@ public class TestCard {
         c.age();
         c.resetAge();
         assertEquals("resetAge() failed",0,(int)c.getAge());
+    }
+
+    @Test
+    public void testResetAgeDuplicate() {
+        Card c = new Card(1);
+        c.age();
+        c.resetAge();
+        assertNotEquals("resetAge() failed",1,(int)c.getAge());
     }
 }
