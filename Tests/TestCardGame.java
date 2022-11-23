@@ -29,8 +29,8 @@ public class TestCardGame {
 
     @Test
     public void testCardGameDuplicate() throws IOException {
-        String inputs = "a\nZ\n8\npack.txt\nbin/pack_8player.txt";
-        InputStream testInputStream_duplicate = new ByteArrayInputStream(inputs.getBytes(StandardCharsets.UTF_8));
+        String inputs_duplicate = "a\nZ\n8\npack.txt\nbin/pack_8player.txt";
+        InputStream testInputStream_duplicate = new ByteArrayInputStream(inputs_duplicate.getBytes(StandardCharsets.UTF_8));
         System.setIn(testInputStream_duplicate);
         CardGame.main(null);
         assertNotEquals(0, (int)CardGame.winPlayer);

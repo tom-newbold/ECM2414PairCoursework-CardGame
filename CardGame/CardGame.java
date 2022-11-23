@@ -21,7 +21,6 @@ public class CardGame {
             try { players = Integer.parseInt(input.nextLine());
             } catch (NumberFormatException e) { System.out.println("Enter a valid number of players:"); }
         }
-        System.out.print(CardGame.players);
         
         Scanner fileReader = new Scanner(System.in);
         Boolean fileIsValid = false;
@@ -29,9 +28,7 @@ public class CardGame {
         while (fileIsValid == false) {
             System.out.println("Enter a location of valid pack to load:");
             packFile = input.nextLine();
-            System.out.print(packFile);
             File f = new File(packFile);
-            System.out.print(f.exists());
             if (f.exists()) {
                 // validity check
                 ArrayList<String> denoms = new ArrayList<String>();
