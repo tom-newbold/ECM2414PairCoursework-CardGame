@@ -14,7 +14,7 @@ import CardGame.CardGame;
 public class TestCardGame {
     @Test
     public void testCardGame() throws IOException {
-        String inputs = "-1\n0\n4\nnotapack.txt\nbin/pack.txt";
+        String inputs = "-1\n0\n4\nbin/notapack.txt\nbin/pack.txt";
         InputStream testInputStream = new ByteArrayInputStream(inputs.getBytes(StandardCharsets.UTF_8));
         System.setIn(testInputStream);
         CardGame.main(null);
@@ -29,7 +29,7 @@ public class TestCardGame {
 
     @Test
     public void testCardGameDuplicate() throws IOException {
-        String inputs_duplicate = "a\nZ\n8\npack.txt\nbin/pack_8player.txt";
+        String inputs_duplicate = "a\nZ\n8\nbin/pack.txt\nbin/pack_8player.txt";
         InputStream testInputStream_duplicate = new ByteArrayInputStream(inputs_duplicate.getBytes(StandardCharsets.UTF_8));
         System.setIn(testInputStream_duplicate);
         CardGame.main(null);
