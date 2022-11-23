@@ -3,6 +3,7 @@
 ### ECM2414 Pair Coursework Project
 
 This project is a threaded card game simulation, written in java. Our development is documented within the attached *Report.pdf*.
+Source code has been documented with javadoc comments.
 
 ## Running the Test Suite
 
@@ -13,5 +14,4 @@ Execute `java -cp "<junit-4.13.2.jar filepath>;<hamcrest-1.3.jar filepath>;." or
 
 ## Contributors
 
-**Thomas Newbold** – 71000126
-**Steven Jangcan** – 710042102
+**Thomas Newbold** – 71000126; **Steven Jangcan** – 710042102
